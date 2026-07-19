@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Payload generated development artifacts
+*.sqlite
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local uploads (the directory itself is kept for mount targets)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs and tooling
+*.log
+.DS_Store
+coverage/
+*.tsbuildinfo

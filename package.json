@@ -1,0 +1,57 @@
+{
+  "name": "highlight-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=4096\" next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "start:prod": "npm run payload:migrate && npm run start",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint . --max-warnings=0",
+    "type-check": "tsc --noEmit",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "payload:migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "payload:migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.86.0",
+    "@payloadcms/next": "3.86.0",
+    "@payloadcms/richtext-lexical": "3.86.0",
+    "@payloadcms/ui": "3.86.0",
+    "cross-env": "10.1.0",
+    "dotenv": "17.2.3",
+    "graphql": "16.12.0",
+    "motion": "12.23.26",
+    "next": "16.2.10",
+    "next-intl": "4.13.2",
+    "payload": "3.86.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "react-hook-form": "7.71.1",
+    "sharp": "0.35.3",
+    "zod": "4.3.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.19.7",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.2",
+    "eslint-config-next": "16.2.10",
+    "postcss": "8.5.19",
+    "prettier": "3.8.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20.9.0",
+    "npm": ">=10"
+  },
+  "overrides": {
+    "dompurify": "3.4.12",
+    "postcss": "8.5.19"
+  }
+}

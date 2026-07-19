@@ -1,0 +1,17 @@
+{
+  "Foundation": {
+    "eyebrow": "Highlight Production",
+    "title": "Nền tảng đã sẵn sàng",
+    "description": "Next.js, Payload CMS, PostgreSQL và hệ thống song ngữ đã được kết nối. Nội dung trang chủ sẽ được xây dựng ở phase tiếp theo.",
+    "admin": "Mở trang quản trị",
+    "language": "English"
+  },
+  "Error": {
+    "title": "Đã có lỗi xảy ra",
+    "description": "Vui lòng thử tải lại trang.",
+    "retry": "Thử lại"
+  },
+  "Loading": {
+    "label": "Đang tải"
+  }
+}

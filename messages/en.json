@@ -1,0 +1,17 @@
+{
+  "Foundation": {
+    "eyebrow": "Highlight Production",
+    "title": "The foundation is ready",
+    "description": "Next.js, Payload CMS, PostgreSQL and bilingual routing are connected. Homepage content will be built in the next phase.",
+    "admin": "Open admin panel",
+    "language": "Tiếng Việt"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "Please try loading the page again.",
+    "retry": "Try again"
+  },
+  "Loading": {
+    "label": "Loading"
+  }
+}
