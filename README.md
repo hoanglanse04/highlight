@@ -926,17 +926,16 @@ Không được chỉ backup database vì database không chứa file ảnh.
     Stories
     Contact
     Footer
-    Phase 5 — SEO and Performance
-    Metadata
-    hreflang
-    sitemap
-    robots
-    structured data
-    responsive images
-    lazy loading
-    cache/revalidation
-    accessibility
-    Phase 6 — Deployment
+    Phase 5 — Projects CMS
+    Project Categories
+    Projects
+    Structured project content blocks
+    Draft/version/preview
+    Typed project data helpers
+    Phase 6 — Projects Frontend and SEO
+    Project listings, categories and detail pages
+    Metadata, structured data and filters
+    Phase 7 — Deployment hardening
     Docker image
     Docker Compose
     Persistent PostgreSQL
@@ -1019,3 +1018,8 @@ Không viết toàn bộ dự án trong một bước. Triển khai tuần tự,
 - [Phase 1 — Foundation](docs/PHASE_1.md)
 - [Phase 2 — Media Management](docs/PHASE_2_MEDIA.md)
 - [Phase 3 — Homepage CMS, Header, Footer, and Site Settings](docs/PHASE_3_HOMEPAGE_CMS.md)
+- [Phase 4 — Homepage Frontend](docs/PHASE_4_HOMEPAGE_FRONTEND.md)
+- [Phase 5 — Projects CMS](docs/PHASE_5_PROJECTS_CMS.md)
+- [Phase 6 — Projects Frontend](docs/PHASE_6_PROJECTS_FRONTEND.md)
+- [Payload Admin localization](docs/ADMIN_LOCALIZATION.md)
+- [Highlight Media content seeder](docs/CONTENT_SEED.md)

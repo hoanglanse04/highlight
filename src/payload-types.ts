@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    projects: Project;
+    'project-categories': ProjectCategory;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +80,8 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'project-categories': ProjectCategoriesSelect<false> | ProjectCategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -134,6 +138,9 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name: string;
+  /**
+   * Vai trò cố định của tài khoản quản trị duy nhất.
+   */
   role: 'super-admin' | 'editor' | 'viewer';
   updatedAt: string;
   createdAt: string;
@@ -155,7 +162,7 @@ export interface User {
   collection: 'users';
 }
 /**
- * Upload and manage website images and bilingual image metadata.
+ * Tải lên và quản lý ảnh website cùng metadata song ngữ.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -163,19 +170,19 @@ export interface User {
 export interface Media {
   id: number;
   /**
-   * Internal label used to identify this image in the Media Library.
+   * Nhãn nội bộ giúp nhận diện ảnh trong thư viện.
    */
   internalTitle?: string | null;
   /**
-   * Required for the currently selected locale. Describe the image for accessibility; do not repeat decorative text.
+   * Bắt buộc cho ngôn ngữ đang chọn. Mô tả nội dung ảnh để hỗ trợ khả năng tiếp cận; không lặp lại chữ trang trí.
    */
   alt: string;
   /**
-   * Optional public-facing caption for the selected locale.
+   * Chú thích hiển thị công khai cho ngôn ngữ đang chọn, không bắt buộc.
    */
   caption?: string | null;
   /**
-   * Photographer, creator, or source credit.
+   * Tên nhiếp ảnh gia, người sáng tạo hoặc nguồn ảnh.
    */
   credit?: string | null;
   tags?:
@@ -186,7 +193,7 @@ export interface Media {
     | null;
   folder?: ('homepage' | 'projects' | 'clients' | 'stories' | 'team' | 'general') | null;
   /**
-   * Internal notes about licensing, approved usage, or replacement.
+   * Ghi chú nội bộ về bản quyền, phạm vi sử dụng hoặc việc thay thế ảnh.
    */
   usageNotes?: string | null;
   updatedAt: string;
@@ -236,6 +243,411 @@ export interface Media {
   };
 }
 /**
+ * Nội dung dự án có cấu trúc và hỗ trợ song ngữ cho website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  /**
+   * Nhãn dùng trong CMS; không hiển thị trên website public.
+   */
+  internalName: string;
+  title: string;
+  /**
+   * Dùng chung cho URL tiếng Việt và tiếng Anh. Được tạo khi thêm mới và không tự đổi về sau. Sửa slug đã xuất bản có thể làm hỏng liên kết cũ.
+   */
+  slug: string;
+  subtitle?: string | null;
+  shortDescription: string;
+  introduction?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  clientName?: string | null;
+  artistName?: string | null;
+  year?: number | null;
+  projectDate?: string | null;
+  location?: string | null;
+  primaryCategory: number | ProjectCategory;
+  /**
+   * Tối đa 5; không chọn lại danh mục chính.
+   */
+  secondaryCategories?: (number | ProjectCategory)[] | null;
+  services?:
+    | {
+        /**
+         * Nhãn dùng trong CMS; không hiển thị trên website public.
+         */
+        internalName: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  coverImage: number | Media;
+  posterImage?: (number | null) | Media;
+  /**
+   * Dán URL YouTube, Vimeo hoặc tệp .mp4/.webm. Trên desktop video sẽ tự chạy, tắt tiếng và lặp lại khi rê chuột; nên ưu tiên MP4/WebM ngắn, đã tối ưu.
+   */
+  hoverPreviewVideoURL?: string | null;
+  heroMediaType: 'image' | 'externalVideo';
+  heroImage?: (number | null) | Media;
+  /**
+   * Chỉ dùng URL YouTube, Vimeo, tệp .mp4 hoặc .webm.
+   */
+  externalVideoURL?: string | null;
+  videoPoster?: (number | null) | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        /**
+         * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+         */
+        displayOrder: number;
+        credit?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  projectFacts?:
+    | {
+        label: string;
+        value: string;
+        /**
+         * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+         */
+        displayOrder: number;
+        id?: string | null;
+      }[]
+    | null;
+  statistics?:
+    | {
+        value: number;
+        prefix?: string | null;
+        suffix?: string | null;
+        label: string;
+        /**
+         * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+         */
+        displayOrder: number;
+        id?: string | null;
+      }[]
+    | null;
+  content?:
+    | (
+        | {
+            internalName?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            maxWidth: 'narrow' | 'normal' | 'wide';
+            textAlign: 'left' | 'center';
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            image: number | Media;
+            altOverride?: string | null;
+            caption?: string | null;
+            credit?: string | null;
+            aspectRatio: 'original' | 'landscape' | 'cinematic' | 'portrait';
+            containOrCover: 'cover' | 'contain';
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fullWidthImage';
+          }
+        | {
+            leftImage: number | Media;
+            rightImage: number | Media;
+            leftCaption?: string | null;
+            rightCaption?: string | null;
+            ratio: 'equal' | 'left-large' | 'right-large';
+            mobileOrder: 'left-first' | 'right-first';
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'twoColumnImages';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            layout: 'grid' | 'masonry' | 'filmstrip';
+            columns: '2' | '3' | '4';
+            images: {
+              image: number | Media;
+              caption?: string | null;
+              /**
+               * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+               */
+              displayOrder: number;
+              id?: string | null;
+            }[];
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageGallery';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            /**
+             * URL YouTube, Vimeo, tệp .mp4 hoặc .webm.
+             */
+            videoURL: string;
+            posterImage: number | Media;
+            autoplay?: boolean | null;
+            muted?: boolean | null;
+            loop?: boolean | null;
+            controls?: boolean | null;
+            aspectRatio: '16:9' | '9:16' | '1:1' | 'cinematic';
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'externalVideo';
+          }
+        | {
+            quote: string;
+            author?: string | null;
+            role?: string | null;
+            portrait?: (number | null) | Media;
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            source: 'useProjectFacts' | 'custom';
+            customFacts?:
+              | {
+                  label: string;
+                  value: string;
+                  /**
+                   * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+                   */
+                  displayOrder: number;
+                  id?: string | null;
+                }[]
+              | null;
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectFacts';
+          }
+        | {
+            source: 'useProjectStatistics' | 'custom';
+            customItems?:
+              | {
+                  value: number;
+                  prefix?: string | null;
+                  suffix?: string | null;
+                  label: string;
+                  /**
+                   * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+                   */
+                  displayOrder: number;
+                  id?: string | null;
+                }[]
+              | null;
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statistics';
+          }
+        | {
+            eyebrow?: string | null;
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            image: number | Media;
+            imagePosition: 'left' | 'right';
+            verticalAlignment: 'top' | 'center' | 'bottom';
+            backgroundStyle: 'default' | 'surface' | 'brand-accent';
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textImage';
+          }
+        | {
+            title?: string | null;
+            mode: 'automatic' | 'manual';
+            manualProjects?: (number | Project)[] | null;
+            maxItems: number;
+            automaticStrategy?: ('samePrimaryCategory' | 'sharedCategories' | 'featured') | null;
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'relatedProjects';
+          }
+      )[]
+    | null;
+  /**
+   * Chỉ dùng dữ liệu thẻ; dự án hiện tại đã được loại trừ.
+   */
+  relatedProjects?: (number | Project)[] | null;
+  seo?: {
+    /**
+     * Khuyến nghị tối đa 60–70 ký tự.
+     */
+    metaTitle?: string | null;
+    /**
+     * Khuyến nghị tối đa 155–170 ký tự.
+     */
+    metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+    /**
+     * URL HTTP(S) chính tắc đầy đủ, không bắt buộc.
+     */
+    canonicalURL?: string | null;
+  };
+  featured?: boolean | null;
+  featuredOrder?: number | null;
+  /**
+   * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
+   */
+  enabled?: boolean | null;
+  /**
+   * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+   */
+  displayOrder: number;
+  /**
+   * Chỉ dùng nội bộ; không trả về qua helper public.
+   */
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Hệ thống phân loại dự án song ngữ. Trạng thái xuất bản dùng chung cho vi và en.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-categories".
+ */
+export interface ProjectCategory {
+  id: number;
+  /**
+   * Nhãn dùng trong CMS; không hiển thị trên website public.
+   */
+  internalName: string;
+  title: string;
+  /**
+   * Dùng chung cho URL tiếng Việt và tiếng Anh. Được tạo khi thêm mới và không tự đổi về sau. Sửa slug đã xuất bản có thể làm hỏng liên kết cũ.
+   */
+  slug: string;
+  shortDescription?: string | null;
+  fullDescription?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  iconKey?:
+    | (
+        | 'event'
+        | 'corporate'
+        | 'sports'
+        | 'social'
+        | 'artist'
+        | 'automotive'
+        | 'travel'
+        | 'beauty'
+        | 'behind-the-scenes'
+      )
+    | null;
+  coverImage: number | Media;
+  heroImage?: (number | null) | Media;
+  /**
+   * URL YouTube, Vimeo, tệp .mp4 hoặc .webm; không bắt buộc.
+   */
+  heroVideoURL?: string | null;
+  seo?: {
+    /**
+     * Khuyến nghị tối đa 60–70 ký tự.
+     */
+    metaTitle?: string | null;
+    /**
+     * Khuyến nghị tối đa 155–170 ký tự.
+     */
+    metaDescription?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+    /**
+     * URL HTTP(S) chính tắc đầy đủ, không bắt buộc.
+     */
+    canonicalURL?: string | null;
+  };
+  /**
+   * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
+   */
+  enabled?: boolean | null;
+  featured?: boolean | null;
+  /**
+   * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
+   */
+  displayOrder: number;
+  /**
+   * Chỉ dùng nội bộ; không trả về qua helper public.
+   */
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -266,6 +678,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'project-categories';
+        value: number | ProjectCategory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -408,6 +828,266 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  internalName?: T;
+  title?: T;
+  slug?: T;
+  subtitle?: T;
+  shortDescription?: T;
+  introduction?: T;
+  clientName?: T;
+  artistName?: T;
+  year?: T;
+  projectDate?: T;
+  location?: T;
+  primaryCategory?: T;
+  secondaryCategories?: T;
+  services?:
+    | T
+    | {
+        internalName?: T;
+        label?: T;
+        id?: T;
+      };
+  coverImage?: T;
+  posterImage?: T;
+  hoverPreviewVideoURL?: T;
+  heroMediaType?: T;
+  heroImage?: T;
+  externalVideoURL?: T;
+  videoPoster?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        displayOrder?: T;
+        credit?: T;
+        id?: T;
+      };
+  projectFacts?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        displayOrder?: T;
+        id?: T;
+      };
+  statistics?:
+    | T
+    | {
+        value?: T;
+        prefix?: T;
+        suffix?: T;
+        label?: T;
+        displayOrder?: T;
+        id?: T;
+      };
+  content?:
+    | T
+    | {
+        richText?:
+          | T
+          | {
+              internalName?: T;
+              content?: T;
+              maxWidth?: T;
+              textAlign?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        fullWidthImage?:
+          | T
+          | {
+              image?: T;
+              altOverride?: T;
+              caption?: T;
+              credit?: T;
+              aspectRatio?: T;
+              containOrCover?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        twoColumnImages?:
+          | T
+          | {
+              leftImage?: T;
+              rightImage?: T;
+              leftCaption?: T;
+              rightCaption?: T;
+              ratio?: T;
+              mobileOrder?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageGallery?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              layout?: T;
+              columns?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    caption?: T;
+                    displayOrder?: T;
+                    id?: T;
+                  };
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        externalVideo?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              videoURL?: T;
+              posterImage?: T;
+              autoplay?: T;
+              muted?: T;
+              loop?: T;
+              controls?: T;
+              aspectRatio?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              author?: T;
+              role?: T;
+              portrait?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        projectFacts?:
+          | T
+          | {
+              source?: T;
+              customFacts?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    displayOrder?: T;
+                    id?: T;
+                  };
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statistics?:
+          | T
+          | {
+              source?: T;
+              customItems?:
+                | T
+                | {
+                    value?: T;
+                    prefix?: T;
+                    suffix?: T;
+                    label?: T;
+                    displayOrder?: T;
+                    id?: T;
+                  };
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textImage?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              content?: T;
+              image?: T;
+              imagePosition?: T;
+              verticalAlignment?: T;
+              backgroundStyle?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        relatedProjects?:
+          | T
+          | {
+              title?: T;
+              mode?: T;
+              manualProjects?: T;
+              maxItems?: T;
+              automaticStrategy?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  relatedProjects?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        noIndex?: T;
+        canonicalURL?: T;
+      };
+  featured?: T;
+  featuredOrder?: T;
+  enabled?: T;
+  displayOrder?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "project-categories_select".
+ */
+export interface ProjectCategoriesSelect<T extends boolean = true> {
+  internalName?: T;
+  title?: T;
+  slug?: T;
+  shortDescription?: T;
+  fullDescription?: T;
+  iconKey?: T;
+  coverImage?: T;
+  heroImage?: T;
+  heroVideoURL?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        noIndex?: T;
+        canonicalURL?: T;
+      };
+  enabled?: T;
+  featured?: T;
+  displayOrder?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -447,7 +1127,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Manage fixed homepage sections. Layout, styling, animation, and component types remain code-owned.
+ * Quản lý nội dung các section cố định. Bố cục, giao diện, animation và loại component vẫn do source code kiểm soát.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage".
@@ -456,11 +1136,11 @@ export interface Homepage {
   id: number;
   seo?: {
     /**
-     * Recommended maximum: 60–70 characters.
+     * Khuyến nghị tối đa 60–70 ký tự.
      */
     metaTitle?: string | null;
     /**
-     * Recommended maximum: 155–170 characters.
+     * Khuyến nghị tối đa 155–170 ký tự.
      */
     metaDescription?: string | null;
     ogTitle?: string | null;
@@ -468,13 +1148,13 @@ export interface Homepage {
     ogImage?: (number | null) | Media;
     noIndex?: boolean | null;
     /**
-     * Optional absolute HTTP(S) canonical URL.
+     * URL HTTP(S) chính tắc đầy đủ, không bắt buộc.
      */
     canonicalURL?: string | null;
   };
   hero: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -484,7 +1164,7 @@ export interface Homepage {
     backgroundImage?: (number | null) | Media;
     posterImage?: (number | null) | Media;
     /**
-     * External HTTP(S) URL only. Video uploads are not supported.
+     * Chỉ dùng URL HTTP(S) bên ngoài. Không hỗ trợ tải video lên.
      */
     externalVideoURL?: string | null;
     primaryCTA?: {
@@ -501,7 +1181,7 @@ export interface Homepage {
   };
   about?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -521,16 +1201,23 @@ export interface Homepage {
       openInNewTab?: boolean | null;
     };
   };
-  featuredProjects?: {
+  featuredProjects: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
     title?: string | null;
     description?: string | null;
     /**
-     * Temporary embedded project cards. A later phase can replace this source with Project relationships.
+     * Chọn nhập thẻ thủ công hoặc lấy dữ liệu từ collection Dự án.
+     */
+    sourceMode: 'manualEmbedded' | 'projectCollection';
+    selectedProjects?: (number | Project)[] | null;
+    collectionLimit?: number | null;
+    collectionFilterFeatured?: boolean | null;
+    /**
+     * Các thẻ dự án nhập trực tiếp; chỉ dùng khi nguồn dữ liệu là thủ công.
      */
     items?:
       | {
@@ -543,33 +1230,39 @@ export interface Homepage {
           coverImage: number | Media;
           previewImage?: (number | null) | Media;
           /**
-           * Optional YouTube, Vimeo, or other external HTTP(S) video URL.
+           * URL HTTP(S) của YouTube, Vimeo hoặc nguồn video khác; không bắt buộc.
            */
           externalVideoURL?: string | null;
           link: string;
           openInNewTab?: boolean | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
         }[]
       | null;
   };
-  projectCategories?: {
+  projectCategories: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
     title?: string | null;
     description?: string | null;
     /**
-     * Temporary homepage category cards; this does not create a Categories collection.
+     * Chọn nhập thẻ thủ công hoặc lấy dữ liệu từ collection Danh mục dự án.
+     */
+    sourceMode: 'manualEmbedded' | 'categoryCollection';
+    selectedCategories?: (number | ProjectCategory)[] | null;
+    collectionLimit?: number | null;
+    /**
+     * Các thẻ danh mục nhập trực tiếp; chỉ dùng khi nguồn dữ liệu là thủ công.
      */
     items?:
       | {
@@ -580,11 +1273,11 @@ export interface Homepage {
           link: string;
           openInNewTab?: boolean | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -593,7 +1286,7 @@ export interface Homepage {
   };
   services?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -608,11 +1301,11 @@ export interface Homepage {
           image?: (number | null) | Media;
           link?: string | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -621,7 +1314,7 @@ export interface Homepage {
   };
   statistics?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -634,11 +1327,11 @@ export interface Homepage {
           suffix?: string | null;
           label: string;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -647,7 +1340,7 @@ export interface Homepage {
   };
   clients?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -657,16 +1350,16 @@ export interface Homepage {
       | {
           name: string;
           /**
-           * Prefer a transparent PNG or WebP with sufficient contrast.
+           * Ưu tiên PNG hoặc WebP nền trong suốt và có độ tương phản phù hợp.
            */
           logo: number | Media;
           websiteURL?: string | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -675,14 +1368,14 @@ export interface Homepage {
   };
   stories?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
     title?: string | null;
     description?: string | null;
     /**
-     * Temporary embedded stories. A later phase can replace this source with Post relationships.
+     * Danh sách câu chuyện nhập trực tiếp; có thể chuyển sang collection Bài viết ở phase sau.
      */
     items?:
       | {
@@ -694,11 +1387,11 @@ export interface Homepage {
           link: string;
           openInNewTab?: boolean | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -707,7 +1400,7 @@ export interface Homepage {
   };
   contactCTA?: {
     /**
-     * Disabled content remains in the CMS but should not be rendered.
+     * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
      */
     enabled?: boolean | null;
     eyebrow?: string | null;
@@ -728,7 +1421,7 @@ export interface Homepage {
   createdAt?: string | null;
 }
 /**
- * Manage website logos, navigation, language switcher, and header CTA.
+ * Quản lý logo, điều hướng, nút chuyển ngôn ngữ và CTA ở đầu trang.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
@@ -744,7 +1437,7 @@ export interface Header {
   };
   navigation?: {
     /**
-     * Use relative paths for internal pages and HTTP(S) URLs externally.
+     * Dùng đường dẫn tương đối cho trang nội bộ và URL HTTP(S) cho liên kết ngoài.
      */
     items?:
       | {
@@ -753,11 +1446,11 @@ export interface Header {
           url: string;
           openInNewTab?: boolean | null;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -767,7 +1460,7 @@ export interface Header {
   cta?: {
     button?: {
       /**
-       * Disabled content remains in the CMS but should not be rendered.
+       * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
        */
       enabled?: boolean | null;
       label?: string | null;
@@ -780,7 +1473,7 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
- * Manage footer branding, localized navigation, contact details, and copyright.
+ * Quản lý thương hiệu, điều hướng song ngữ, thông tin liên hệ và bản quyền ở chân trang.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
@@ -802,11 +1495,11 @@ export interface Footer {
                 url: string;
                 openInNewTab?: boolean | null;
                 /**
-                 * Disabled content remains in the CMS but should not be rendered.
+                 * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
                  */
                 enabled?: boolean | null;
                 /**
-                 * Lower values appear first. Array drag order remains available in Admin.
+                 * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
                  */
                 displayOrder: number;
                 id?: string | null;
@@ -829,7 +1522,7 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
- * Manage public brand defaults, contact information, social links, SEO defaults, and maintenance messaging. Never store secrets here.
+ * Quản lý thương hiệu, liên hệ, mạng xã hội, SEO mặc định và thông báo bảo trì. Không lưu secret tại đây.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -841,7 +1534,7 @@ export interface SiteSetting {
     legalName?: string | null;
     defaultLocale: 'vi' | 'en';
     /**
-     * Read-only mirror of the Payload fallback locale.
+     * Giá trị chỉ đọc, phản ánh locale dự phòng của Payload.
      */
     fallbackLocale: 'vi';
     favicon?: (number | null) | Media;
@@ -855,7 +1548,7 @@ export interface SiteSetting {
   };
   social?: {
     /**
-     * Canonical social links. Do not duplicate these in Header or Footer.
+     * Danh sách mạng xã hội dùng chung. Không nhập trùng trong Header hoặc Footer.
      */
     socialLinks?:
       | {
@@ -863,11 +1556,11 @@ export interface SiteSetting {
           label?: string | null;
           url: string;
           /**
-           * Disabled content remains in the CMS but should not be rendered.
+           * Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.
            */
           enabled?: boolean | null;
           /**
-           * Lower values appear first. Array drag order remains available in Admin.
+           * Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.
            */
           displayOrder: number;
           id?: string | null;
@@ -960,6 +1653,10 @@ export interface HomepageSelect<T extends boolean = true> {
         eyebrow?: T;
         title?: T;
         description?: T;
+        sourceMode?: T;
+        selectedProjects?: T;
+        collectionLimit?: T;
+        collectionFilterFeatured?: T;
         items?:
           | T
           | {
@@ -986,6 +1683,9 @@ export interface HomepageSelect<T extends boolean = true> {
         eyebrow?: T;
         title?: T;
         description?: T;
+        sourceMode?: T;
+        selectedCategories?: T;
+        collectionLimit?: T;
         items?:
           | T
           | {

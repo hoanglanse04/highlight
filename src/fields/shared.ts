@@ -37,9 +37,10 @@ export function enabledField(defaultValue = true): Field {
   return {
     name: 'enabled',
     type: 'checkbox',
+    label: 'Bật hiển thị',
     defaultValue,
     admin: {
-      description: 'Disabled content remains in the CMS but should not be rendered.',
+      description: 'Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.',
     },
   }
 }
@@ -48,12 +49,13 @@ export function displayOrderField(): Field {
   return {
     name: 'displayOrder',
     type: 'number',
+    label: 'Thứ tự hiển thị',
     defaultValue: 0,
     min: 0,
     required: true,
     validate: validateNonNegativeInteger,
     admin: {
-      description: 'Lower values appear first. Array drag order remains available in Admin.',
+      description: 'Số nhỏ hơn hiển thị trước. Vẫn có thể kéo thả item trong danh sách.',
     },
   }
 }
@@ -64,12 +66,14 @@ export function sectionHeadingFields(options: SectionHeadingOptions = {}): Field
     {
       name: 'eyebrow',
       type: 'text',
+      label: 'Dòng dẫn',
       localized: true,
       maxLength: 100,
     },
     {
       name: 'title',
       type: 'text',
+      label: 'Tiêu đề',
       localized: true,
       maxLength: 180,
       required: options.titleRequired,
@@ -77,6 +81,7 @@ export function sectionHeadingFields(options: SectionHeadingOptions = {}): Field
     {
       name: 'description',
       type: 'textarea',
+      label: 'Mô tả',
       localized: true,
       maxLength: 1200,
       required: options.descriptionRequired,
@@ -120,6 +125,7 @@ export function ctaField(
     {
       name: 'label',
       type: 'text',
+      label: 'Nhãn nút',
       localized: true,
       maxLength: 80,
       required: options.requiredLabel,
@@ -127,6 +133,7 @@ export function ctaField(
     {
       name: 'url',
       type: 'text',
+      label: 'Đường dẫn',
       maxLength: 500,
       required: options.requiredURL,
       validate: validateInternalOrExternalURL,
@@ -134,6 +141,7 @@ export function ctaField(
     {
       name: 'openInNewTab',
       type: 'checkbox',
+      label: 'Mở trong tab mới',
       defaultValue: false,
     },
   ]
@@ -157,6 +165,7 @@ export function navigationLinkFields(options: { includeInternalName?: boolean } 
     fields.push({
       name: 'internalName',
       type: 'text',
+      label: 'Tên nội bộ',
       maxLength: 120,
       required: true,
     })
@@ -166,6 +175,7 @@ export function navigationLinkFields(options: { includeInternalName?: boolean } 
     {
       name: 'label',
       type: 'text',
+      label: 'Nhãn liên kết',
       localized: true,
       maxLength: 100,
       required: true,
@@ -173,6 +183,7 @@ export function navigationLinkFields(options: { includeInternalName?: boolean } 
     {
       name: 'url',
       type: 'text',
+      label: 'Đường dẫn',
       maxLength: 500,
       required: true,
       validate: validateInternalOrExternalURL,
@@ -180,6 +191,7 @@ export function navigationLinkFields(options: { includeInternalName?: boolean } 
     {
       name: 'openInNewTab',
       type: 'checkbox',
+      label: 'Mở trong tab mới',
       defaultValue: false,
     },
     enabledField(true),
@@ -194,46 +206,52 @@ export function seoFields(): Field[] {
     {
       name: 'metaTitle',
       type: 'text',
+      label: 'Tiêu đề SEO',
       localized: true,
       maxLength: 70,
       admin: {
-        description: 'Recommended maximum: 60–70 characters.',
+        description: 'Khuyến nghị tối đa 60–70 ký tự.',
       },
     },
     {
       name: 'metaDescription',
       type: 'textarea',
+      label: 'Mô tả SEO',
       localized: true,
       maxLength: 170,
       admin: {
-        description: 'Recommended maximum: 155–170 characters.',
+        description: 'Khuyến nghị tối đa 155–170 ký tự.',
       },
     },
     {
       name: 'ogTitle',
       type: 'text',
+      label: 'Tiêu đề Open Graph',
       localized: true,
       maxLength: 100,
     },
     {
       name: 'ogDescription',
       type: 'textarea',
+      label: 'Mô tả Open Graph',
       localized: true,
       maxLength: 220,
     },
-    mediaRelationship('ogImage', 'Open Graph image'),
+    mediaRelationship('ogImage', 'Ảnh Open Graph'),
     {
       name: 'noIndex',
       type: 'checkbox',
+      label: 'Không cho công cụ tìm kiếm lập chỉ mục',
       defaultValue: false,
     },
     {
       name: 'canonicalURL',
       type: 'text',
+      label: 'URL chính tắc',
       maxLength: 500,
       validate: validateExternalURL,
       admin: {
-        description: 'Optional absolute HTTP(S) canonical URL.',
+        description: 'URL HTTP(S) chính tắc đầy đủ, không bắt buộc.',
       },
     },
   ]
@@ -247,7 +265,7 @@ export const socialPlatformOptions = [
   { label: 'Vimeo', value: 'vimeo' },
   { label: 'LinkedIn', value: 'linkedin' },
   { label: 'Behance', value: 'behance' },
-  { label: 'Other', value: 'other' },
+  { label: 'Khác', value: 'other' },
 ] as const
 
 export function socialLinksField(): Field {
@@ -257,23 +275,26 @@ export function socialLinksField(): Field {
     maxRows: 12,
     admin: {
       initCollapsed: true,
-      description: 'Canonical social links. Do not duplicate these in Header or Footer.',
+      description: 'Danh sách mạng xã hội dùng chung. Không nhập trùng trong Header hoặc Footer.',
     },
     fields: [
       {
         name: 'platform',
         type: 'select',
+        label: 'Nền tảng',
         options: [...socialPlatformOptions],
         required: true,
       },
       {
         name: 'label',
         type: 'text',
+        label: 'Nhãn tùy chọn',
         maxLength: 80,
       },
       {
         name: 'url',
         type: 'text',
+        label: 'Đường dẫn',
         maxLength: 500,
         required: true,
         validate: validateExternalURL,

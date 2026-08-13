@@ -12,36 +12,41 @@ import {
 import {
   websiteGlobalAccess,
   websiteGlobalAdmin,
+  websiteGlobalHooks,
   websiteGlobalVersions,
 } from '@/globals/shared'
 
 export const SiteSettings: GlobalConfig<'site-settings'> = {
   slug: 'site-settings',
-  label: 'Site Settings',
+  label: 'Cài đặt website',
   admin: websiteGlobalAdmin(
-    'Manage public brand defaults, contact information, social links, SEO defaults, and maintenance messaging. Never store secrets here.',
+    'Quản lý thương hiệu, liên hệ, mạng xã hội, SEO mặc định và thông báo bảo trì. Không lưu secret tại đây.',
   ),
   access: websiteGlobalAccess,
+  hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
     collapsibleGroup(
       'brand',
-      'Brand',
+      'Thương hiệu',
       [
         {
           name: 'siteName',
           type: 'text',
+          label: 'Tên website',
           maxLength: 120,
           required: true,
         },
         {
           name: 'legalName',
           type: 'text',
+          label: 'Tên pháp lý',
           maxLength: 180,
         },
         {
           name: 'defaultLocale',
           type: 'select',
+          label: 'Ngôn ngữ mặc định',
           defaultValue: 'vi',
           options: [
             { label: 'Tiếng Việt', value: 'vi' },
@@ -52,68 +57,77 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
         {
           name: 'fallbackLocale',
           type: 'select',
+          label: 'Ngôn ngữ dự phòng',
           defaultValue: 'vi',
           options: [{ label: 'Tiếng Việt', value: 'vi' }],
           required: true,
           admin: {
-            description: 'Read-only mirror of the Payload fallback locale.',
+            description: 'Giá trị chỉ đọc, phản ánh locale dự phòng của Payload.',
             readOnly: true,
           },
         },
         mediaRelationship('favicon', 'Favicon'),
-        mediaRelationship('defaultOGImage', 'Default Open Graph image'),
-        mediaRelationship('logoMark', 'Logo mark'),
+        mediaRelationship('defaultOGImage', 'Ảnh Open Graph mặc định'),
+        mediaRelationship('logoMark', 'Biểu trưng logo'),
       ],
       { initCollapsed: false },
     ),
-    collapsibleGroup('contact', 'Contact', [
+    collapsibleGroup('contact', 'Liên hệ', [
       {
         name: 'email',
         type: 'email',
+        label: 'Email',
       },
       {
         name: 'phone',
         type: 'text',
+        label: 'Số điện thoại',
         maxLength: 32,
         validate: validatePhone,
       },
       {
         name: 'address',
         type: 'textarea',
+        label: 'Địa chỉ',
         localized: true,
         maxLength: 500,
       },
     ]),
-    collapsibleGroup('social', 'Social links', [socialLinksField()]),
-    collapsibleGroup('seoDefaults', 'SEO defaults', [
+    collapsibleGroup('social', 'Mạng xã hội', [socialLinksField()]),
+    collapsibleGroup('seoDefaults', 'SEO mặc định', [
       {
         name: 'defaultMetaTitle',
         type: 'text',
+        label: 'Tiêu đề SEO mặc định',
         localized: true,
         maxLength: 70,
       },
       {
         name: 'defaultMetaDescription',
         type: 'textarea',
+        label: 'Mô tả SEO mặc định',
         localized: true,
         maxLength: 170,
       },
     ]),
-    collapsibleGroup('system', 'System', [
+    collapsibleGroup('system', 'Hệ thống', [
       {
         name: 'maintenanceMode',
         type: 'checkbox',
+        label: 'Chế độ bảo trì',
         defaultValue: false,
       },
       {
         name: 'maintenanceMessage',
         type: 'textarea',
+        label: 'Thông báo bảo trì',
         localized: true,
         maxLength: 500,
       },
       {
         name: 'defaultContactCTAURL',
         type: 'text',
+        label: 'URL CTA liên hệ mặc định',
         maxLength: 500,
         validate: validateInternalOrExternalURL,
       },

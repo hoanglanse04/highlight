@@ -34,6 +34,7 @@ COPY --from=builder --chown=node:node /app/public ./public
 COPY --from=builder --chown=node:node /app/src ./src
 COPY --from=builder --chown=node:node /app/migrations ./migrations
 COPY --from=builder --chown=node:node /app/messages ./messages
+COPY --from=builder --chown=node:node /app/seed-assets ./seed-assets
 COPY --from=builder --chown=node:node /app/package.json /app/package-lock.json ./
 COPY --from=builder --chown=node:node /app/next.config.mjs /app/tsconfig.json ./
 

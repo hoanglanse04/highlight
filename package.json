@@ -14,7 +14,11 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "payload:migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
-    "payload:migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create"
+    "payload:migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
+    "seed:admin": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/admin.ts",
+    "seed:channels": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/channelContent.ts",
+    "seed:content": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/content.ts",
+    "seed:content:dry": "cross-env NODE_OPTIONS=--no-deprecation SEED_DRY_RUN=true payload run src/seed/content.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.86.0",

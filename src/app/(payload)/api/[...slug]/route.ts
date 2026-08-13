@@ -11,8 +11,43 @@ import {
 } from '@payloadcms/next/routes'
 
 export const GET = REST_GET(config)
-export const POST = REST_POST(config)
 export const DELETE = REST_DELETE(config)
 export const PATCH = REST_PATCH(config)
 export const PUT = REST_PUT(config)
 export const OPTIONS = REST_OPTIONS(config)
+
+const payloadPOST = REST_POST(config)
+
+type RouteArguments = {
+  params: Promise<{
+    slug?: string[]
+  }>
+}
+
+export async function POST(
+  request: Request,
+  arguments_: RouteArguments,
+): Promise<Response> {
+  const params = await arguments_.params
+
+  if (
+    params.slug?.[0] === 'users' &&
+    params.slug?.[1] === 'first-register'
+  ) {
+    return Response.json(
+      {
+        errors: [
+          {
+            message:
+              'Đăng ký tài khoản đã bị tắt. Tài khoản quản trị chỉ được tạo bằng seeder trên máy chủ.',
+          },
+        ],
+      },
+      { status: 403 },
+    )
+  }
+
+  return payloadPOST(request, {
+    params: Promise.resolve(params),
+  })
+}

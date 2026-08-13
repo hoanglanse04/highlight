@@ -1,40 +1,23 @@
-import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
 import {
   createUsers,
+  denyAccess,
+  denyFieldAccess,
   readUsers,
-  superAdminFieldAccess,
-  superAdminsOnly,
   updateUsers,
-  userRoles,
 } from '@/access/users'
-
-const makeFirstUserSuperAdmin: CollectionBeforeChangeHook = async ({
-  data,
-  operation,
-  req,
-}) => {
-  if (operation !== 'create') {
-    return data
-  }
-
-  const { totalDocs } = await req.payload.count({
-    collection: 'users',
-    overrideAccess: true,
-  })
-
-  return totalDocs === 0 ? { ...data, role: 'super-admin' } : data
-}
 
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: 'User',
-    plural: 'Users',
+    singular: 'Người dùng',
+    plural: 'Người dùng',
   },
   admin: {
     defaultColumns: ['email', 'name', 'role', 'updatedAt'],
-    group: 'System',
+    group: 'Hệ thống',
+    hidden: true,
     useAsTitle: 'email',
   },
   auth: {
@@ -46,32 +29,33 @@ export const Users: CollectionConfig = {
     create: createUsers,
     read: readUsers,
     update: updateUsers,
-    delete: superAdminsOnly,
-  },
-  hooks: {
-    beforeChange: [makeFirstUserSuperAdmin],
+    delete: denyAccess,
   },
   fields: [
     {
       name: 'name',
       type: 'text',
+      label: 'Họ và tên',
       required: true,
     },
     {
       name: 'role',
       type: 'select',
+      label: 'Vai trò',
       required: true,
       defaultValue: 'editor',
-      options: userRoles.map((role) => ({
-        label: role
-          .split('-')
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(' '),
-        value: role,
-      })),
+      options: [
+        { label: 'Quản trị viên cấp cao', value: 'super-admin' },
+        { label: 'Biên tập viên', value: 'editor' },
+        { label: 'Người xem', value: 'viewer' },
+      ],
       access: {
-        create: superAdminFieldAccess,
-        update: superAdminFieldAccess,
+        create: denyFieldAccess,
+        update: denyFieldAccess,
+      },
+      admin: {
+        description: 'Vai trò cố định của tài khoản quản trị duy nhất.',
+        readOnly: true,
       },
       saveToJWT: true,
     },

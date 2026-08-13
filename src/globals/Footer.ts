@@ -9,46 +9,51 @@ import { validatePhone } from '@/fields/validation'
 import {
   websiteGlobalAccess,
   websiteGlobalAdmin,
+  websiteGlobalHooks,
   websiteGlobalVersions,
 } from '@/globals/shared'
 
 export const Footer: GlobalConfig<'footer'> = {
   slug: 'footer',
-  label: 'Footer',
+  label: 'Chân trang',
   admin: websiteGlobalAdmin(
-    'Manage footer branding, localized navigation, contact details, and copyright.',
+    'Quản lý thương hiệu, điều hướng song ngữ, thông tin liên hệ và bản quyền ở chân trang.',
   ),
   access: websiteGlobalAccess,
+  hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
     collapsibleGroup(
       'branding',
-      'Branding',
+      'Thương hiệu',
       [
-        mediaRelationship('logo', 'Footer logo'),
+        mediaRelationship('logo', 'Logo chân trang'),
         {
           name: 'shortDescription',
           type: 'textarea',
+          label: 'Mô tả ngắn',
           localized: true,
           maxLength: 500,
         },
-        mediaRelationship('backgroundImage', 'Background image'),
+        mediaRelationship('backgroundImage', 'Ảnh nền'),
       ],
       { initCollapsed: false },
     ),
     collapsibleGroup(
       'navigation',
-      'Navigation columns',
+      'Các cột điều hướng',
       [
         {
           name: 'columns',
           type: 'array',
+          label: 'Cột điều hướng',
           maxRows: 6,
           admin: { initCollapsed: true },
           fields: [
             {
               name: 'title',
               type: 'text',
+              label: 'Tiêu đề cột',
               localized: true,
               maxLength: 100,
               required: true,
@@ -56,6 +61,7 @@ export const Footer: GlobalConfig<'footer'> = {
             {
               name: 'links',
               type: 'array',
+              label: 'Liên kết',
               maxRows: 12,
               admin: { initCollapsed: true },
               fields: navigationLinkFields(),
@@ -65,28 +71,32 @@ export const Footer: GlobalConfig<'footer'> = {
       ],
       { initCollapsed: false },
     ),
-    collapsibleGroup('contact', 'Contact', [
+    collapsibleGroup('contact', 'Liên hệ', [
       {
         name: 'email',
         type: 'email',
+        label: 'Email',
       },
       {
         name: 'phone',
         type: 'text',
+        label: 'Số điện thoại',
         maxLength: 32,
         validate: validatePhone,
       },
       {
         name: 'address',
         type: 'textarea',
+        label: 'Địa chỉ',
         localized: true,
         maxLength: 500,
       },
     ]),
-    collapsibleGroup('legal', 'Legal', [
+    collapsibleGroup('legal', 'Pháp lý', [
       {
         name: 'copyright',
         type: 'text',
+        label: 'Bản quyền',
         localized: true,
         maxLength: 240,
       },

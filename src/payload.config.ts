@@ -3,9 +3,12 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
+import { vi } from 'payload/i18n/vi'
 import sharp from 'sharp'
 
 import { Media } from '@/collections/Media'
+import { ProjectCategories } from '@/collections/ProjectCategories'
+import { Projects } from '@/collections/Projects'
 import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
@@ -26,7 +29,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Projects, ProjectCategories],
   globals: [Homepage, Header, Footer, SiteSettings],
   db: postgresAdapter({
     pool: {
@@ -36,6 +39,12 @@ export default buildConfig({
     },
   }),
   editor: lexicalEditor(),
+  i18n: {
+    fallbackLanguage: 'vi',
+    supportedLanguages: {
+      vi,
+    },
+  },
   localization: {
     locales: [
       {

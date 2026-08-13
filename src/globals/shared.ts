@@ -5,6 +5,7 @@ import {
   contentEditors,
   publishedOrAuthenticated,
 } from '@/access/users'
+import { revalidatePublishedWebsite } from '@/hooks/revalidateWebsite'
 
 export const websiteGlobalAccess: NonNullable<GlobalConfig['access']> = {
   read: publishedOrAuthenticated,
@@ -21,6 +22,10 @@ export const websiteGlobalVersions: NonNullable<GlobalConfig['versions']> = {
     validate: false,
   },
   max: 30,
+}
+
+export const websiteGlobalHooks: NonNullable<GlobalConfig['hooks']> = {
+  afterChange: [revalidatePublishedWebsite],
 }
 
 export const websitePreview: GeneratePreviewURL = (_doc, { locale }) => {

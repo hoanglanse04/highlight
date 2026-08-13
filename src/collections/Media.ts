@@ -103,11 +103,11 @@ const validateAndPrepareUpload: CollectionBeforeOperationHook<'media'> = async (
   }
 
   if (file.size > MAX_UPLOAD_BYTES) {
-    throw new APIError('Image exceeds the 15 MiB upload limit.', 413)
+    throw new APIError('Ảnh vượt quá giới hạn tải lên 15 MiB.', 413)
   }
 
   if (!allowedMimeTypes.includes(file.mimetype as AllowedMimeType)) {
-    throw new APIError('Only JPEG, PNG, WebP, and AVIF images are allowed.', 400)
+    throw new APIError('Chỉ chấp nhận ảnh JPEG, PNG, WebP và AVIF.', 400)
   }
 
   const input = file.tempFilePath || file.data
@@ -120,14 +120,14 @@ const validateAndPrepareUpload: CollectionBeforeOperationHook<'media'> = async (
       limitInputPixels: MAX_INPUT_PIXELS,
     }).metadata()
   } catch {
-    throw new APIError('The uploaded file is not a valid supported image.', 400)
+    throw new APIError('Tệp tải lên không phải ảnh hợp lệ được hỗ trợ.', 400)
   }
 
   const canonicalType = getCanonicalFileType(metadata)
 
   if (!canonicalType || canonicalType.mimeType !== file.mimetype) {
     throw new APIError(
-      'The detected image type does not match the declared MIME type.',
+      'Định dạng ảnh phát hiện được không khớp với MIME type đã khai báo.',
       400,
     )
   }
@@ -154,8 +154,8 @@ const imageSizeAdminOptions = {
 export const Media: CollectionConfig<'media'> = {
   slug: 'media',
   labels: {
-    singular: 'Media',
-    plural: 'Media',
+    singular: 'Hình ảnh',
+    plural: 'Thư viện ảnh',
   },
   admin: {
     defaultColumns: [
@@ -166,8 +166,8 @@ export const Media: CollectionConfig<'media'> = {
       'filesize',
       'updatedAt',
     ],
-    description: 'Upload and manage website images and bilingual image metadata.',
-    group: 'Content',
+    description: 'Tải lên và quản lý ảnh website cùng metadata song ngữ.',
+    group: 'Nội dung',
     useAsTitle: 'internalTitle',
   },
   access: {
@@ -231,8 +231,9 @@ export const Media: CollectionConfig<'media'> = {
     {
       name: 'internalTitle',
       type: 'text',
+      label: 'Tên nội bộ',
       admin: {
-        description: 'Internal label used to identify this image in the Media Library.',
+        description: 'Nhãn nội bộ giúp nhận diện ảnh trong thư viện.',
       },
       access: {
         create: contentEditorFieldAccess,
@@ -243,36 +244,41 @@ export const Media: CollectionConfig<'media'> = {
     {
       name: 'alt',
       type: 'text',
+      label: 'Văn bản thay thế (alt)',
       localized: true,
       required: true,
       admin: {
         description:
-          'Required for the currently selected locale. Describe the image for accessibility; do not repeat decorative text.',
+          'Bắt buộc cho ngôn ngữ đang chọn. Mô tả nội dung ảnh để hỗ trợ khả năng tiếp cận; không lặp lại chữ trang trí.',
       },
     },
     {
       name: 'caption',
       type: 'textarea',
+      label: 'Chú thích',
       localized: true,
       admin: {
-        description: 'Optional public-facing caption for the selected locale.',
+        description: 'Chú thích hiển thị công khai cho ngôn ngữ đang chọn, không bắt buộc.',
       },
     },
     {
       name: 'credit',
       type: 'text',
+      label: 'Nguồn/Tác giả',
       admin: {
-        description: 'Photographer, creator, or source credit.',
+        description: 'Tên nhiếp ảnh gia, người sáng tạo hoặc nguồn ảnh.',
       },
     },
     {
       name: 'tags',
       type: 'array',
+      label: 'Thẻ',
       maxRows: 30,
       fields: [
         {
           name: 'tag',
           type: 'text',
+          label: 'Thẻ',
           required: true,
         },
       ],
@@ -280,21 +286,23 @@ export const Media: CollectionConfig<'media'> = {
     {
       name: 'folder',
       type: 'select',
+      label: 'Thư mục nội dung',
       defaultValue: 'general',
       options: [
-        { label: 'Homepage', value: 'homepage' },
-        { label: 'Projects', value: 'projects' },
-        { label: 'Clients', value: 'clients' },
-        { label: 'Stories', value: 'stories' },
-        { label: 'Team', value: 'team' },
-        { label: 'General', value: 'general' },
+        { label: 'Trang chủ', value: 'homepage' },
+        { label: 'Dự án', value: 'projects' },
+        { label: 'Khách hàng', value: 'clients' },
+        { label: 'Câu chuyện', value: 'stories' },
+        { label: 'Đội ngũ', value: 'team' },
+        { label: 'Chung', value: 'general' },
       ],
     },
     {
       name: 'usageNotes',
       type: 'textarea',
+      label: 'Ghi chú sử dụng',
       admin: {
-        description: 'Internal notes about licensing, approved usage, or replacement.',
+        description: 'Ghi chú nội bộ về bản quyền, phạm vi sử dụng hoặc việc thay thế ảnh.',
         position: 'sidebar',
       },
       access: {

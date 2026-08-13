@@ -5,9 +5,8 @@ import { redirect } from 'next/navigation'
 import { getPayload, type PayloadRequest } from 'payload'
 
 import { isAuthenticated } from '@/access/users'
+import { isAllowedPreviewPath } from '@/lib/projects/previewPaths'
 import config from '@payload-config'
-
-const allowedPreviewPaths = new Set(['/vi', '/en'])
 
 function matchesSecret(received: string | null, expected: string | undefined): boolean {
   if (!received || !expected) return false
@@ -25,7 +24,7 @@ export async function GET(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url)
   const path = searchParams.get('path')
 
-  if (!path || !allowedPreviewPaths.has(path)) {
+  if (!path || !isAllowedPreviewPath(path)) {
     return new Response('Invalid preview path.', { status: 400 })
   }
 

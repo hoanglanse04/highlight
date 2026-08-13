@@ -9,37 +9,45 @@ import {
 import {
   websiteGlobalAccess,
   websiteGlobalAdmin,
+  websiteGlobalHooks,
   websiteGlobalVersions,
 } from '@/globals/shared'
 
 export const Header: GlobalConfig<'header'> = {
   slug: 'header',
-  label: 'Header',
+  label: 'Đầu trang',
   admin: websiteGlobalAdmin(
-    'Manage website logos, navigation, language switcher, and header CTA.',
+    'Quản lý logo, điều hướng, nút chuyển ngôn ngữ và CTA ở đầu trang.',
   ),
   access: websiteGlobalAccess,
+  hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
     collapsibleGroup(
       'branding',
-      'Branding and behavior',
+      'Thương hiệu và hành vi',
       [
-        mediaRelationship('logoLight', 'Light logo'),
-        mediaRelationship('logoDark', 'Dark logo'),
+        mediaRelationship('logoLight', 'Logo nền tối'),
+        mediaRelationship('logoDark', 'Logo nền sáng'),
         {
           name: 'sticky',
           type: 'checkbox',
+          label: 'Cố định khi cuộn trang',
           defaultValue: true,
         },
         {
           name: 'transparentOnHero',
           type: 'checkbox',
-          defaultValue: true,
+          label: 'Trong suốt trên Hero',
+          defaultValue: false,
+          admin: {
+            hidden: true,
+          },
         },
         {
           name: 'showLanguageSwitcher',
           type: 'checkbox',
+          label: 'Hiển thị nút chuyển ngôn ngữ',
           defaultValue: true,
         },
       ],
@@ -47,23 +55,24 @@ export const Header: GlobalConfig<'header'> = {
     ),
     collapsibleGroup(
       'navigation',
-      'Navigation',
+      'Điều hướng',
       [
         {
           name: 'items',
           type: 'array',
+          label: 'Mục điều hướng',
           maxRows: 10,
           admin: {
             initCollapsed: true,
-            description: 'Use relative paths for internal pages and HTTP(S) URLs externally.',
+            description: 'Dùng đường dẫn tương đối cho trang nội bộ và URL HTTP(S) cho liên kết ngoài.',
           },
           fields: navigationLinkFields({ includeInternalName: true }),
         },
       ],
       { initCollapsed: false },
     ),
-    collapsibleGroup('cta', 'Header CTA', [
-      ctaField('button', 'CTA button', { includeEnabled: true }),
+    collapsibleGroup('cta', 'CTA đầu trang', [
+      ctaField('button', 'Nút CTA', { includeEnabled: true }),
     ]),
   ],
 }

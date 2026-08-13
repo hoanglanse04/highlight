@@ -53,24 +53,11 @@ export const authenticatedFieldAccess: FieldAccess = ({ req }) =>
 export const contentEditorFieldAccess: FieldAccess = ({ req }) =>
   canManageContent(req.user)
 
-export const createUsers: Access = async ({ req }) => {
-  if (isSuperAdmin(req.user)) {
-    return true
-  }
-
-  const { totalDocs } = await req.payload.count({
-    collection: 'users',
-    overrideAccess: true,
-  })
-
-  return totalDocs === 0
-}
+// Highlight uses one seeded administrator account. Account creation and deletion
+// are intentionally unavailable through both the Admin UI and public APIs.
+export const createUsers: Access = () => false
 
 export const readUsers: Access = ({ req }) => {
-  if (isSuperAdmin(req.user)) {
-    return true
-  }
-
   if (!req.user) {
     return false
   }
@@ -83,11 +70,7 @@ export const readUsers: Access = ({ req }) => {
 }
 
 export const updateUsers: Access = ({ req }) => {
-  if (isSuperAdmin(req.user)) {
-    return true
-  }
-
-  if (!req.user || isViewer(req.user)) {
+  if (!req.user) {
     return false
   }
 
@@ -101,3 +84,7 @@ export const updateUsers: Access = ({ req }) => {
 export const superAdminsOnly: Access = ({ req }) => isSuperAdmin(req.user)
 
 export const superAdminFieldAccess: FieldAccess = ({ req }) => isSuperAdmin(req.user)
+
+export const denyAccess: Access = () => false
+
+export const denyFieldAccess: FieldAccess = () => false

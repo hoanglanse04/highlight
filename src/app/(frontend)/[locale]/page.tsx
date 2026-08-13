@@ -1,47 +1,207 @@
+import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
+import { hasLocale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import NextLink from 'next/link'
+import { notFound } from 'next/navigation'
 
-import { Link } from '@/i18n/navigation'
-import { routing } from '@/i18n/routing'
+import { AboutSection } from '@/components/home/AboutSection'
+import { ClientsSection } from '@/components/home/ClientsSection'
+import { ContactCTASection } from '@/components/home/ContactCTASection'
+import { FeaturedProjectsSection } from '@/components/home/FeaturedProjectsSection'
+import { HeroSection } from '@/components/home/HeroSection'
+import { HomepageEmptyState } from '@/components/home/HomepageEmptyState'
+import { MaintenanceScreen } from '@/components/home/MaintenanceScreen'
+import { ProjectCategoriesSection } from '@/components/home/ProjectCategoriesSection'
+import { ServicesSection } from '@/components/home/ServicesSection'
+import { StatisticsSection } from '@/components/home/StatisticsSection'
+import { StoriesSection } from '@/components/home/StoriesSection'
+import { OrganizationJsonLd } from '@/components/layout/OrganizationJsonLd'
+import { PreviewBanner } from '@/components/layout/PreviewBanner'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { routing, type AppLocale } from '@/i18n/routing'
+import { getEnabledItems } from '@/lib/content/homepage'
+import { getHomepageProjectSources } from '@/lib/projects/homepageSources'
+import { getProjectPreviewContext } from '@/lib/projects/preview'
+import {
+  getFooter,
+  getHeader,
+  getHomepage,
+  getSiteSettings,
+} from '@/lib/payload/websiteGlobals'
+import { buildHomepageMetadata } from '@/lib/seo/homepage'
 
 type HomePageProps = {
   params: Promise<{ locale: string }>
 }
 
-export default async function HomePage({ params }: HomePageProps) {
-  const { locale } = await params
+function resolveLocale(value: string): AppLocale {
+  if (!hasLocale(routing.locales, value)) notFound()
+  return value
+}
+
+export async function generateMetadata({
+  params,
+}: HomePageProps): Promise<Metadata> {
+  const locale = resolveLocale((await params).locale)
   setRequestLocale(locale)
-  const t = await getTranslations('Foundation')
-  const alternateLocale = locale === 'vi' ? 'en' : 'vi'
+  const draft = await draftMode()
+  const [homepage, settings, t] = await Promise.all([
+    getHomepage(locale, draft.isEnabled),
+    getSiteSettings(locale, draft.isEnabled),
+    getTranslations('HomepageUI'),
+  ])
+
+  return buildHomepageMetadata({
+    fallbackTitle: t('siteFallbackName'),
+    homepage,
+    locale,
+    settings,
+  })
+}
+
+export default async function HomePage({ params }: HomePageProps) {
+  const locale = resolveLocale((await params).locale)
+  setRequestLocale(locale)
+  const draft = await draftMode()
+  const [homepage, header, footer, settings, t] = await Promise.all([
+    getHomepage(locale, draft.isEnabled),
+    getHeader(locale, draft.isEnabled),
+    getFooter(locale, draft.isEnabled),
+    getSiteSettings(locale, draft.isEnabled),
+    getTranslations('HomepageUI'),
+  ])
+  const preview = await getProjectPreviewContext(draft.isEnabled)
+  const projectSources = await getHomepageProjectSources(homepage, locale, preview)
+
+  const siteName = settings?.brand.siteName || t('siteFallbackName')
+  const publicHeader = header
+    ? {
+        ...header,
+        navigation: header.navigation
+          ? {
+              ...header.navigation,
+              items: getEnabledItems(header.navigation.items),
+            }
+          : undefined,
+      }
+    : null
+
+  if (settings?.system?.maintenanceMode && !draft.isEnabled) {
+    return (
+      <MaintenanceScreen
+        message={
+          settings.system.maintenanceMessage || t('maintenanceDescription')
+        }
+        siteName={siteName}
+        title={t('maintenanceTitle')}
+      />
+    )
+  }
 
   return (
-    <main className="flex min-h-screen items-center px-6 py-16 sm:px-10 lg:px-16">
-      <section className="mx-auto w-full max-w-6xl">
-        <p className="mb-6 text-sm font-semibold tracking-[0.24em] text-brand uppercase">
-          {t('eyebrow')}
-        </p>
-        <h1 className="max-w-4xl font-heading text-5xl leading-[0.96] font-bold tracking-[-0.05em] uppercase sm:text-7xl lg:text-8xl">
-          {t('title')}
-        </h1>
-        <p className="mt-8 max-w-2xl text-base leading-7 text-muted sm:text-lg">
-          {t('description')}
-        </p>
-        <div className="mt-10 flex flex-wrap gap-4">
-          <NextLink className="button button-primary" href="/admin">
-            {t('admin')}
-          </NextLink>
-          <Link
-            className="button button-secondary"
-            href="/"
-            locale={alternateLocale}
-          >
-            {t('language')}
-          </Link>
-        </div>
-        <p className="mt-16 text-xs tracking-[0.2em] text-muted uppercase">
-          {routing.locales.join(' / ')}
-        </p>
-      </section>
-    </main>
+    <>
+      <a className="skip-link" href="#main-content">
+        {t('skipToContent')}
+      </a>
+      <OrganizationJsonLd settings={settings} />
+      <SiteHeader
+        closeMenuLabel={t('closeMenu')}
+        header={publicHeader}
+        locale={locale}
+        openMenuLabel={t('openMenu')}
+        primaryNavigationLabel={t('primaryNavigation')}
+        siteName={siteName}
+        switchLanguageLabel={t('switchLanguage')}
+      />
+
+      {homepage ? (
+        <main id="main-content">
+          <HeroSection
+            homepage={homepage}
+            labels={{
+              loadingVideo: t('loadingVideo'),
+              playVideo: t('playVideo'),
+              scrollDown: t('scrollDown'),
+              videoUnavailable: t('videoUnavailable'),
+            }}
+            locale={locale}
+          />
+          <AboutSection
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.about')}
+          />
+          <StatisticsSection
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.statistics')}
+          />
+          <FeaturedProjectsSection
+            homepage={homepage}
+            locale={locale}
+            projects={projectSources.projects}
+            sectionLabel={t('sections.featuredProjects')}
+            videoLabel={t('video')}
+            viewLabel={t('viewProject')}
+          />
+          <ProjectCategoriesSection
+            categories={projectSources.categories}
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.categories')}
+            viewLabel={t('viewCategory')}
+          />
+          <ServicesSection
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.services')}
+          />
+          <ClientsSection
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.clients')}
+          />
+          <StoriesSection
+            homepage={homepage}
+            locale={locale}
+            readMoreLabel={t('readMore')}
+            sectionLabel={t('sections.stories')}
+          />
+          <ContactCTASection
+            contactLabel={t('contactUs')}
+            homepage={homepage}
+            locale={locale}
+            sectionLabel={t('sections.contact')}
+            settings={settings}
+            socialLabel={t('socialLinks')}
+          />
+        </main>
+      ) : (
+        <HomepageEmptyState
+          description={
+            draft.isEnabled
+              ? t('previewEmptyDescription')
+              : t('emptyDescription')
+          }
+          title={draft.isEnabled ? t('previewEmptyTitle') : siteName}
+        />
+      )}
+
+      <SiteFooter
+        footer={footer}
+        locale={locale}
+        settings={settings}
+        siteName={siteName}
+        socialLabel={t('socialLinks')}
+      />
+      {draft.isEnabled ? (
+        <PreviewBanner
+          exitLabel={t('exitPreview')}
+          label={t('previewMode')}
+          locale={locale}
+        />
+      ) : null}
+    </>
   )
 }

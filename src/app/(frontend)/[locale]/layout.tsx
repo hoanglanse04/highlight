@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { Inter, Space_Grotesk } from 'next/font/google'
@@ -25,11 +24,6 @@ type LocaleLayoutProps = {
   params: Promise<{ locale: string }>
 }
 
-export const metadata: Metadata = {
-  title: 'Highlight Production',
-  description: 'Film, photography and media production.',
-}
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
@@ -47,8 +41,11 @@ export default async function LocaleLayout({
   setRequestLocale(locale)
 
   return (
-    <html lang={locale} className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${spaceGrotesk.variable}`}
+    >
+      <body className="overflow-x-clip">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
