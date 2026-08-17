@@ -21,6 +21,28 @@ const serverURL = process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
 
 export default buildConfig({
   admin: {
+    avatar: {
+      Component: {
+        path: '@/components/admin/AccountDropdown',
+        exportName: 'AccountDropdown',
+      },
+    },
+    components: {
+      beforeNavLinks: [
+        {
+          path: '@/components/admin/DashboardNavLink',
+          exportName: 'DashboardNavLink',
+        },
+      ],
+      views: {
+        dashboard: {
+          Component: {
+            path: '@/components/admin/AdminDashboard',
+            exportName: 'AdminDashboard',
+          },
+        },
+      },
+    },
     meta: {
       titleSuffix: ' — Highlight Production',
     },

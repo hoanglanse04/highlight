@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import {
-  collapsibleGroup,
+  groupedTab,
   mediaRelationship,
   socialLinksField,
 } from '@/fields/shared'
@@ -26,10 +26,13 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
   hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
-    collapsibleGroup(
-      'brand',
-      'Thương hiệu',
-      [
+    {
+      type: 'tabs',
+      admin: {
+        className: 'highlight-global-tabs',
+      },
+      tabs: [
+        groupedTab('brand', 'Thương hiệu', [
         {
           name: 'siteName',
           type: 'text',
@@ -69,10 +72,8 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
         mediaRelationship('favicon', 'Favicon'),
         mediaRelationship('defaultOGImage', 'Ảnh Open Graph mặc định'),
         mediaRelationship('logoMark', 'Biểu trưng logo'),
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup('contact', 'Liên hệ', [
+      ]),
+        groupedTab('contact', 'Liên hệ', [
       {
         name: 'email',
         type: 'email',
@@ -93,8 +94,8 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
         maxLength: 500,
       },
     ]),
-    collapsibleGroup('social', 'Mạng xã hội', [socialLinksField()]),
-    collapsibleGroup('seoDefaults', 'SEO mặc định', [
+        groupedTab('social', 'Mạng xã hội', [socialLinksField()]),
+        groupedTab('seoDefaults', 'SEO mặc định', [
       {
         name: 'defaultMetaTitle',
         type: 'text',
@@ -110,7 +111,7 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
         maxLength: 170,
       },
     ]),
-    collapsibleGroup('system', 'Hệ thống', [
+        groupedTab('system', 'Hệ thống', [
       {
         name: 'maintenanceMode',
         type: 'checkbox',
@@ -132,5 +133,7 @@ export const SiteSettings: GlobalConfig<'site-settings'> = {
         validate: validateInternalOrExternalURL,
       },
     ]),
+      ],
+    },
   ],
 }

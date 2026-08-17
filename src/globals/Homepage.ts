@@ -1,7 +1,6 @@
 import type { Field, GlobalConfig } from 'payload'
 
 import {
-  collapsibleGroup,
   ctaField,
   displayOrderField,
   enabledField,
@@ -300,6 +299,31 @@ const storyFields: Field[] = [
   displayOrderField(),
 ]
 
+type HomepageTab = Extract<Field, { type: 'tabs' }>['tabs'][number]
+
+function homepageTab(
+  name: string,
+  label: string,
+  fields: Field[],
+  options: { description?: string } = {},
+): HomepageTab {
+  return {
+    label,
+    admin: options.description ? { description: options.description } : undefined,
+    fields: [
+      {
+        name,
+        type: 'group',
+        label: false,
+        admin: {
+          hideGutter: true,
+        },
+        fields,
+      },
+    ],
+  }
+}
+
 export const Homepage: GlobalConfig<'homepage'> = {
   slug: 'homepage',
   label: 'Trang chủ',
@@ -310,15 +334,17 @@ export const Homepage: GlobalConfig<'homepage'> = {
   hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
-    collapsibleGroup('seo', 'SEO', seoFields(), {
-      description: 'Metadata tìm kiếm và mạng xã hội song ngữ của trang chủ.',
-      initCollapsed: false,
-    }),
-    collapsibleGroup(
-      'hero',
-      'Hero',
-      [
-        ...sectionHeadingFields({ titleRequired: true }),
+    {
+      type: 'tabs',
+      admin: {
+        className: 'highlight-homepage-tabs',
+      },
+      tabs: [
+        homepageTab('seo', 'SEO', seoFields(), {
+          description: 'Metadata tìm kiếm và mạng xã hội song ngữ của trang chủ.',
+        }),
+        homepageTab('hero', 'Hero', [
+        ...sectionHeadingFields({ enabledLabel: 'Hiển thị Hero', titleRequired: true }),
         {
           name: 'mediaType',
           type: 'select',
@@ -375,11 +401,9 @@ export const Homepage: GlobalConfig<'homepage'> = {
           label: 'Hiển thị chỉ dẫn cuộn',
           defaultValue: true,
         },
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup('about', 'Giới thiệu', [
-      ...sectionHeadingFields(),
+      ]),
+        homepageTab('about', 'Giới thiệu', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị Giới thiệu' }),
       {
         name: 'highlightText',
         type: 'textarea',
@@ -398,11 +422,8 @@ export const Homepage: GlobalConfig<'homepage'> = {
       },
       ctaField('cta', 'CTA'),
     ]),
-    collapsibleGroup(
-      'featuredProjects',
-      'Dự án nổi bật',
-      [
-        ...sectionHeadingFields(),
+        homepageTab('featuredProjects', 'Dự án nổi bật', [
+        ...sectionHeadingFields({ enabledLabel: 'Hiển thị Dự án nổi bật' }),
         {
           name: 'sourceMode',
           type: 'select',
@@ -464,13 +485,9 @@ export const Homepage: GlobalConfig<'homepage'> = {
           },
           fields: featuredProjectFields,
         },
-      ],
-    ),
-    collapsibleGroup(
-      'projectCategories',
-      'Danh mục dự án',
-      [
-        ...sectionHeadingFields(),
+      ]),
+        homepageTab('projectCategories', 'Danh mục dự án', [
+        ...sectionHeadingFields({ enabledLabel: 'Hiển thị Danh mục dự án' }),
         {
           name: 'sourceMode',
           type: 'select',
@@ -523,10 +540,9 @@ export const Homepage: GlobalConfig<'homepage'> = {
           },
           fields: projectCategoryFields,
         },
-      ],
-    ),
-    collapsibleGroup('services', 'Dịch vụ', [
-      ...sectionHeadingFields(),
+      ]),
+        homepageTab('services', 'Dịch vụ', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị Dịch vụ' }),
       {
         name: 'items',
         type: 'array',
@@ -536,8 +552,8 @@ export const Homepage: GlobalConfig<'homepage'> = {
         fields: serviceFields,
       },
     ]),
-    collapsibleGroup('statistics', 'Thống kê', [
-      ...sectionHeadingFields(),
+        homepageTab('statistics', 'Thống kê', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị Thống kê' }),
       {
         name: 'items',
         type: 'array',
@@ -547,8 +563,8 @@ export const Homepage: GlobalConfig<'homepage'> = {
         fields: statisticFields,
       },
     ]),
-    collapsibleGroup('clients', 'Khách hàng', [
-      ...sectionHeadingFields(),
+        homepageTab('clients', 'Khách hàng', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị Khách hàng' }),
       {
         name: 'items',
         type: 'array',
@@ -558,8 +574,8 @@ export const Homepage: GlobalConfig<'homepage'> = {
         fields: clientFields,
       },
     ]),
-    collapsibleGroup('stories', 'Câu chuyện', [
-      ...sectionHeadingFields(),
+        homepageTab('stories', 'Câu chuyện', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị Câu chuyện' }),
       {
         name: 'items',
         type: 'array',
@@ -573,8 +589,8 @@ export const Homepage: GlobalConfig<'homepage'> = {
         fields: storyFields,
       },
     ]),
-    collapsibleGroup('contactCTA', 'CTA liên hệ', [
-      ...sectionHeadingFields(),
+        homepageTab('contactCTA', 'CTA liên hệ', [
+      ...sectionHeadingFields({ enabledLabel: 'Hiển thị CTA liên hệ' }),
       mediaRelationship('backgroundImage', 'Ảnh nền'),
       ctaField('cta', 'CTA'),
       {
@@ -597,5 +613,7 @@ export const Homepage: GlobalConfig<'homepage'> = {
         maxLength: 500,
       },
     ]),
+      ],
+    },
   ],
 }

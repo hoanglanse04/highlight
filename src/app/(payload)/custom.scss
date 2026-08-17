@@ -1,3 +1,1923 @@
 :root {
-  --theme-success-500: #ff5c00;
+  --theme-success-500: #ff5a1f;
+  --highlight-admin-page-gutter: clamp(24px, 3vw, 48px);
+  --highlight-admin-bg: #f7f8fa;
+  --highlight-admin-surface: #ffffff;
+  --highlight-admin-surface-muted: #f3f4f6;
+  --highlight-admin-text: #111827;
+  --highlight-admin-muted: #6b7280;
+  --highlight-admin-border: #e5e7eb;
+  --highlight-admin-brand: #ff5a1f;
+  --highlight-admin-brand-dark: #e14d18;
+  --highlight-admin-brand-soft: #fff1eb;
+  --highlight-admin-content-width: 1440px;
+  --highlight-admin-header-height: 64px;
+  --highlight-admin-success: #16a34a;
+  --highlight-admin-warning: #d97706;
+  --highlight-admin-error: #dc2626;
+  --highlight-login-ink: #241610;
+  --highlight-login-muted: #84695b;
+  --highlight-login-border: #f8d9c8;
+  --highlight-white: #ffffff;
+}
+
+@layer payload {
+  body:has(.nav):not(:has(.login__form)) {
+    --theme-bg: var(--highlight-admin-bg);
+    --theme-input-bg: var(--highlight-admin-surface);
+    --theme-text: var(--highlight-admin-text);
+    --theme-border-color: var(--highlight-admin-border);
+    --theme-elevation-0: #ffffff;
+    --theme-elevation-50: #f9fafb;
+    --theme-elevation-100: #f3f4f6;
+    --theme-elevation-150: #e5e7eb;
+    --theme-elevation-200: #d1d5db;
+    --theme-elevation-250: #9ca3af;
+    --theme-elevation-300: #6b7280;
+    --theme-elevation-400: #4b5563;
+    --theme-elevation-500: #374151;
+    --theme-elevation-600: #1f2937;
+    --theme-elevation-700: #111827;
+    --theme-elevation-800: #0f172a;
+    --theme-elevation-900: #020617;
+    --theme-success-100: var(--highlight-admin-brand-soft);
+    --theme-success-500: var(--highlight-admin-brand);
+    --theme-success-600: var(--highlight-admin-brand-dark);
+    background:
+      radial-gradient(circle at 15% 0%, rgba(255, 90, 31, 0.095), transparent 30%),
+      radial-gradient(circle at 86% 9%, rgba(255, 123, 67, 0.055), transparent 28%),
+      radial-gradient(circle at 52% 100%, rgba(255, 90, 31, 0.035), transparent 30%),
+      var(--highlight-admin-bg);
+    background-attachment: fixed;
+    color: var(--highlight-admin-text);
+    font-size: 15px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .template-default,
+  body:has(.nav):not(:has(.login__form)) .template-default__wrap {
+    background: transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav {
+    width: 236px;
+    border-right: 1px solid var(--highlight-admin-border);
+    background: rgba(244, 245, 247, 0.92);
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__scroll {
+    padding-inline: 14px;
+    padding-block-start: 92px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__header {
+    min-height: 88px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-toggler {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__header-content::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 10px;
+    background:
+      var(--highlight-admin-brand) url('/admin-login-logo.jpg') center 42% / 315% auto no-repeat;
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__header-content::after {
+    content: 'Highlight Media CMS';
+    position: absolute;
+    top: 22px;
+    left: 72px;
+    width: 142px;
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    font-weight: 750;
+    letter-spacing: 0;
+    line-height: 1.25;
+    text-align: left;
+    text-transform: none;
+    white-space: normal;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group {
+    --highlight-admin-nav-group-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h18'/%3E%3Cpath d='M6 12h12'/%3E%3Cpath d='M9 17h6'/%3E%3C/svg%3E");
+    margin-bottom: 18px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group__toggle::before {
+    content: '';
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    opacity: 0.72;
+    -webkit-mask: var(--highlight-admin-nav-group-icon) center / contain no-repeat;
+    mask: var(--highlight-admin-nav-group-icon) center / contain no-repeat;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group:has(a[href*='/admin/collections/media']) {
+    --highlight-admin-nav-group-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group:has(a[href*='/admin/collections/projects']) {
+    --highlight-admin-nav-group-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 6h10'/%3E%3Cpath d='M10 12h10'/%3E%3Cpath d='M10 18h10'/%3E%3Cpath d='M4 6h1v1H4z'/%3E%3Cpath d='M4 12h1v1H4z'/%3E%3Cpath d='M4 18h1v1H4z'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group:has(a[href*='/admin/globals/homepage']) {
+    --highlight-admin-nav-group-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 2 12h3v8h6v-5h2v5h6v-8h3z'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav-group__toggle,
+  body:has(.nav):not(:has(.login__form)) .nav__label {
+    color: #7c5f52;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h16'/%3E%3Cpath d='M4 12h16'/%3E%3Cpath d='M4 18h16'/%3E%3C/svg%3E");
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 36px;
+    margin: 2px 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link:not(.highlight-admin-dashboard-nav__link)::before {
+    content: '';
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    opacity: 0.68;
+    -webkit-mask: var(--highlight-admin-nav-icon) center / contain no-repeat;
+    mask: var(--highlight-admin-nav-icon) center / contain no-repeat;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link:not(.highlight-admin-dashboard-nav__link):hover::before,
+  body:has(.nav):not(:has(.login__form)) .nav__link:not(.highlight-admin-dashboard-nav__link):focus-visible::before,
+  body:has(.nav):not(:has(.login__form)) .nav__link.active:not(.highlight-admin-dashboard-nav__link)::before,
+  body:has(.nav):not(:has(.login__form)) .nav__link:has(.nav__link-indicator):not(.highlight-admin-dashboard-nav__link)::before {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/collections/media'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/collections/projects'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22'/%3E%3Cpath d='M8 7h8'/%3E%3Cpath d='M8 11h8'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/collections/project-categories'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.6 13.5 13.5 20.6a2 2 0 0 1-2.8 0L3 12.9V3h9.9l7.7 7.7a2 2 0 0 1 0 2.8Z'/%3E%3Ccircle cx='8' cy='8' r='1.5'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/globals/homepage'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11 12 3l9 8'/%3E%3Cpath d='M5 10v10h14V10'/%3E%3Cpath d='M9 20v-6h6v6'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/globals/header'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cpath d='M3 9h18'/%3E%3Cpath d='M8 6.5h.01'/%3E%3Cpath d='M12 6.5h.01'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/globals/footer'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cpath d='M3 15h18'/%3E%3Cpath d='M8 18h8'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link[href*='/admin/globals/site-settings'] {
+    --highlight-admin-nav-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 7h-9'/%3E%3Cpath d='M14 17H5'/%3E%3Ccircle cx='17' cy='17' r='3'/%3E%3Ccircle cx='7' cy='7' r='3'/%3E%3C/svg%3E");
+  }
+
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav {
+    margin: 0 0 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--highlight-admin-border);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav__mark {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    opacity: 0.68;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='7' height='9' x='3' y='3' rx='1'/%3E%3Crect width='7' height='5' x='14' y='3' rx='1'/%3E%3Crect width='7' height='9' x='14' y='12' rx='1'/%3E%3Crect width='7' height='5' x='3' y='16' rx='1'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='7' height='9' x='3' y='3' rx='1'/%3E%3Crect width='7' height='5' x='14' y='3' rx='1'/%3E%3Crect width='7' height='9' x='14' y='12' rx='1'/%3E%3Crect width='7' height='5' x='3' y='16' rx='1'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav__link:hover .highlight-admin-dashboard-nav__mark,
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav__link:focus-visible .highlight-admin-dashboard-nav__mark,
+  body:has(.nav):not(:has(.login__form)) .highlight-admin-dashboard-nav__link.active .highlight-admin-dashboard-nav__mark {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav a.nav__link:hover,
+  body:has(.nav):not(:has(.login__form)) .nav a.nav__link:focus-visible {
+    background: #f9fafb;
+    color: var(--highlight-admin-text);
+    text-decoration: none;
+    outline: 2px solid transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link.active,
+  body:has(.nav):not(:has(.login__form)) .nav__link:has(.nav__link-indicator) {
+    background: var(--highlight-admin-brand-soft);
+    color: var(--highlight-admin-brand);
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .nav__link-indicator {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header {
+    position: sticky;
+    top: 12px;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    width: calc(100% - (var(--highlight-admin-page-gutter) * 2));
+    max-width: calc(var(--highlight-admin-content-width) - (var(--highlight-admin-page-gutter) * 2));
+    height: var(--highlight-admin-header-height);
+    margin: 12px auto 40px;
+    border-bottom: 1px solid var(--highlight-admin-border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header::before {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header__content {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding-inline: clamp(24px, 2.4vw, 34px);
+    padding-block: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header__wrapper {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--base) / 2);
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 10px;
+    color: var(--highlight-admin-muted);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav__home {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 9px;
+    background:
+      var(--highlight-admin-brand) url('/admin-login-logo.jpg') center 42% / 325% auto no-repeat;
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav__home svg {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav a,
+  body:has(.nav):not(:has(.login__form)) .step-nav span {
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav a {
+    text-decoration: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .step-nav a:hover,
+  body:has(.nav):not(:has(.login__form)) .step-nav a:focus-visible {
+    color: var(--highlight-admin-brand);
+    text-decoration: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header__localizer.localizer {
+    position: absolute;
+    top: 50%;
+    right: clamp(64px, 5vw, 92px);
+    transform: translate3d(0, -50%, 0);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header__localizer.localizer > .popup-button,
+  body:has(.nav):not(:has(.login__form)) .app-header__localizer.localizer > button {
+    min-height: 34px;
+    border-radius: 8px;
+    background: var(--highlight-admin-surface-muted);
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .app-header__account {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    outline: none;
+  }
+
+  /* Account Dropdown */
+  .highlight-account-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .highlight-account-dropdown__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px 3px 3px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 999px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 160ms ease;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+
+    &:hover,
+    &:focus-visible,
+    &.is-active {
+      border-color: rgba(255, 90, 31, 0.4);
+      background: var(--highlight-admin-brand-soft);
+      outline: none;
+    }
+
+    &.is-active {
+      box-shadow: 0 0 0 2px rgba(255, 90, 31, 0.2);
+    }
+  }
+
+  .highlight-account-dropdown__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #4b5563;
+    transition: all 160ms ease;
+
+    .highlight-account-dropdown__trigger:hover &,
+    .highlight-account-dropdown__trigger.is-active & {
+      background: #ffffff;
+      color: var(--highlight-admin-brand);
+    }
+  }
+
+  .highlight-account-dropdown__chevron {
+    color: #9ca3af;
+    transition: transform 160ms ease, color 160ms ease;
+
+    &.is-open {
+      transform: rotate(180deg);
+      color: var(--highlight-admin-brand);
+    }
+  }
+
+  .highlight-account-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: calc(var(--z-modal) + 10);
+    min-width: 250px;
+    max-width: 320px;
+    padding: 6px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow:
+      0 12px 30px -5px rgba(17, 24, 39, 0.14),
+      0 8px 12px -6px rgba(17, 24, 39, 0.08),
+      0 0 0 1px rgba(17, 24, 39, 0.03);
+    animation: accountDropdownFadeIn 140ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes accountDropdownFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .highlight-account-dropdown__header {
+    padding: 10px 12px 8px;
+    border-radius: 8px;
+    background: #f9fafb;
+  }
+
+  .highlight-account-dropdown__user-name {
+    font-size: 13.5px;
+    font-weight: 750;
+    color: var(--highlight-admin-text);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .highlight-account-dropdown__user-email {
+    font-size: 12px;
+    color: var(--highlight-admin-muted);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .highlight-account-dropdown__badge {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--highlight-admin-brand-soft);
+    color: var(--highlight-admin-brand);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .highlight-account-dropdown__divider {
+    height: 1px;
+    margin: 6px 4px;
+    background: #f3f4f6;
+  }
+
+  .highlight-account-dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 36px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 140ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background: #f3f4f6;
+      color: var(--highlight-admin-text);
+      outline: none;
+    }
+
+    &--danger {
+      color: #dc2626;
+
+      &:hover,
+      &:focus-visible {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+    }
+  }
+
+  .highlight-account-dropdown__item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  .highlight-account-dropdown__item-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) main,
+  body:has(.nav):not(:has(.login__form)) .gutter--left.gutter--right {
+    box-sizing: border-box;
+    width: calc(100% - (var(--highlight-admin-page-gutter) * 2));
+    max-width: calc(var(--highlight-admin-content-width) - (var(--highlight-admin-page-gutter) * 2));
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) h1,
+  body:has(.nav):not(:has(.login__form)) h2,
+  body:has(.nav):not(:has(.login__form)) h3 {
+    color: var(--highlight-admin-text);
+    letter-spacing: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) h1 {
+    font-size: clamp(28px, 2vw, 32px);
+    font-weight: 750;
+  }
+
+  body:has(.nav):not(:has(.login__form)) h2 {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  body:has(.nav):not(:has(.login__form)) h3 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .card,
+  body:has(.nav):not(:has(.login__form)) .doc-header,
+  body:has(.nav):not(:has(.login__form)) .collapsible,
+  body:has(.nav):not(:has(.login__form)) .group-field,
+  body:has(.nav):not(:has(.login__form)) .array-field,
+  body:has(.nav):not(:has(.login__form)) .blocks-field,
+  body:has(.nav):not(:has(.login__form)) .rich-text,
+  body:has(.nav):not(:has(.login__form)) .table {
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 12px;
+    background: var(--highlight-admin-surface);
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .card {
+    min-height: 96px;
+    padding: 20px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .card--has-onclick:hover {
+    border-color: rgba(255, 90, 31, 0.28);
+    background: #ffffff;
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.06);
+    transform: translateY(-1px);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .card__title {
+    color: var(--highlight-admin-text);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .card__actions .btn__icon {
+    border-color: var(--highlight-admin-border);
+    background: #ffffff;
+    color: var(--highlight-admin-brand);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header,
+  body:has(.nav):not(:has(.login__form)) .list-header {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 92px;
+    margin: 0 0 18px;
+    padding-block: 20px !important;
+    padding-inline: clamp(24px, 3vw, 36px) !important;
+    overflow: hidden;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 12px;
+    background:
+      linear-gradient(90deg, rgba(255, 90, 31, 0.045) 0%, rgba(255, 255, 255, 0) 28%),
+      var(--highlight-admin-surface);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.03);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header::before,
+  body:has(.nav):not(:has(.login__form)) .list-header::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    left: 0;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--highlight-admin-brand);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header::after,
+  body:has(.nav):not(:has(.login__form)) .list-header::after {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header > *,
+  body:has(.nav):not(:has(.login__form)) .list-header > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header__title,
+  body:has(.nav):not(:has(.login__form)) .doc-header h1 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    color: var(--highlight-admin-text);
+    font-size: clamp(24px, 2.2vw, 30px);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header .doc-tabs,
+  body:has(.nav):not(:has(.login__form)) .doc-tabs {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tabs__tabs-container {
+    display: flex;
+    align-items: center;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tabs__tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    background: var(--highlight-admin-surface-muted);
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 9px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tabs__tabs li {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tab,
+  body:has(.nav):not(:has(.login__form)) .doc-header a,
+  body:has(.nav):not(:has(.login__form)) .doc-header button,
+  body:has(.nav):not(:has(.login__form)) .doc-header [role='tab'],
+  body:has(.nav):not(:has(.login__form)) .doc-header .btn--style-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 4px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: none;
+    transition:
+      background 150ms ease,
+      color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tab:hover:not(.doc-tab--active),
+  body:has(.nav):not(:has(.login__form)) .doc-header a:hover,
+  body:has(.nav):not(:has(.login__form)) .doc-header button:hover,
+  body:has(.nav):not(:has(.login__form)) .doc-header .btn--style-tab:hover:not(.doc-tab--active) {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--highlight-admin-text);
+    text-decoration: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tab--active,
+  body:has(.nav):not(:has(.login__form)) .doc-tab.active,
+  body:has(.nav):not(:has(.login__form)) .doc-header .btn--style-tab.doc-tab--active,
+  body:has(.nav):not(:has(.login__form)) .doc-header a[aria-current='page'],
+  body:has(.nav):not(:has(.login__form)) .doc-header button[aria-selected='true'],
+  body:has(.nav):not(:has(.login__form)) .doc-header [role='tab'][aria-selected='true'] {
+    background: #ffffff !important;
+    color: var(--highlight-admin-brand) !important;
+    font-weight: 750;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.08) !important;
+    cursor: default;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-tab .pill,
+  body:has(.nav):not(:has(.login__form)) .doc-tab__label .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--highlight-admin-brand-soft);
+    color: var(--highlight-admin-brand);
+    font-size: 11px;
+    font-weight: 750;
+    line-height: 1;
+    margin-left: 4px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-header__after-header,
+  body:has(.nav):not(:has(.login__form)) .doc-header__description,
+  body:has(.nav):not(:has(.login__form)) .doc-header p,
+  body:has(.nav):not(:has(.login__form)) .doc-header .description {
+    width: 100%;
+    max-width: 860px;
+    margin: 0;
+    padding: 0;
+    color: var(--highlight-admin-muted);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  /* List Header */
+  body:has(.nav):not(:has(.login__form)) .list-header__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .list-header__title-and-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .list-header__title {
+    margin: 0;
+    color: var(--highlight-admin-text);
+    font-size: clamp(24px, 2.2vw, 30px);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .list-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .list-header__after-header-content {
+    width: 100%;
+    margin-top: 2px;
+    color: var(--highlight-admin-muted);
+    font-size: 13.5px;
+  }
+
+  /* Document Controls (action bar below doc-header) */
+  body:has(.nav):not(:has(.login__form)) .doc-controls,
+  body:has(.nav):not(:has(.login__form)) .document-controls,
+  body:has(.nav):not(:has(.login__form)) .edit-view__controls,
+  body:has(.nav):not(:has(.login__form)) .global-edit__controls {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 20px;
+    padding-inline: 0 !important;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__wrapper,
+  body:has(.nav):not(:has(.login__form)) .document-controls__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    width: 100%;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--highlight-admin-muted);
+    font-size: 13.5px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__list-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__status {
+    color: #374151;
+    font-weight: 600;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .doc-controls__divider {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .document-fields,
+  body:has(.nav):not(:has(.login__form)) .render-fields,
+  body:has(.nav):not(:has(.login__form)) .tabs-field__content,
+  body:has(.nav):not(:has(.login__form)) .collapsible__content,
+  body:has(.nav):not(:has(.login__form)) .group-field__wrap,
+  body:has(.nav):not(:has(.login__form)) .array-field__draggable-rows,
+  body:has(.nav):not(:has(.login__form)) .blocks-field__rows {
+    display: grid;
+    gap: 20px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .field-type {
+    margin: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .field-type + .field-type {
+    margin-top: 2px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .field-label,
+  body:has(.nav):not(:has(.login__form)) label {
+    margin-bottom: 8px;
+    color: #1f2937;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .field-description,
+  body:has(.nav):not(:has(.login__form)) .field-type__description,
+  body:has(.nav):not(:has(.login__form)) .description {
+    margin-top: 7px;
+    color: var(--highlight-admin-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .collapsible,
+  body:has(.nav):not(:has(.login__form)) .group-field,
+  body:has(.nav):not(:has(.login__form)) .array-field,
+  body:has(.nav):not(:has(.login__form)) .blocks-field {
+    overflow: visible;
+    margin-bottom: 18px;
+    border-radius: 10px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .collapsible__toggle-wrap,
+  body:has(.nav):not(:has(.login__form)) .group-field__header,
+  body:has(.nav):not(:has(.login__form)) .array-field__header,
+  body:has(.nav):not(:has(.login__form)) .blocks-field__header {
+    min-height: 44px;
+    border-bottom: 1px solid #eef0f3;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .group-field__header,
+  body:has(.nav):not(:has(.login__form)) .array-field__header,
+  body:has(.nav):not(:has(.login__form)) .blocks-field__header {
+    padding: 0 20px;
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    font-weight: 750;
+    letter-spacing: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .collapsible__toggle {
+    color: transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .collapsible__header-wrap,
+  body:has(.nav):not(:has(.login__form)) .collapsible__header-wrap .row-label,
+  body:has(.nav):not(:has(.login__form)) .collapsible__header-wrap label {
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    font-weight: 750;
+    letter-spacing: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .collapsible__content,
+  body:has(.nav):not(:has(.login__form)) .group-field__wrap,
+  body:has(.nav):not(:has(.login__form)) .array-field__draggable-rows,
+  body:has(.nav):not(:has(.login__form)) .blocks-field__rows {
+    padding: 22px 20px 24px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .tabs-field__tabs {
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 4px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 10px;
+    background: #f9fafb;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .tabs-field__tab {
+    min-height: 34px;
+    border-radius: 8px;
+    color: var(--highlight-admin-muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .tabs-field__tab--active,
+  body:has(.nav):not(:has(.login__form)) .tabs-field__tab[aria-selected='true'] {
+    background: #ffffff;
+    color: var(--highlight-admin-brand);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs).tabs-field {
+    overflow: visible;
+    margin: 0 0 22px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tabs-wrap {
+    position: sticky;
+    top: calc(var(--highlight-admin-header-height) + 24px);
+    z-index: calc(var(--z-modal) - 1);
+    margin: 0;
+    border-bottom: 1px solid var(--highlight-admin-border);
+    background: rgba(249, 250, 251, 0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 10px 10px 0 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+    gap: 6px;
+    padding: 8px;
+    border-bottom: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tabs::before,
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tabs::after {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    margin: 0;
+    padding: 0 13px;
+    border-radius: 8px;
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.2;
+    opacity: 1;
+    transition:
+      background 160ms ease,
+      color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab-button::after {
+    display: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab-button:hover,
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab-button:focus-visible {
+    background: #ffffff;
+    color: var(--highlight-admin-text);
+    outline: 2px solid transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab-button--active {
+    background: var(--highlight-admin-brand-soft);
+    color: var(--highlight-admin-brand);
+    box-shadow: inset 0 0 0 1px rgba(255, 90, 31, 0.22);
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__content-wrap {
+    padding: 36px 20px 32px;
+    border-radius: 0 0 10px 10px;
+    background: #ffffff;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab > .group-field {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab > .group-field > .group-field__wrap {
+    padding-top: 6px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab > .group-field > .group-field__wrap > .render-fields,
+  body:has(.nav):not(:has(.login__form)) :is(.highlight-homepage-tabs, .highlight-global-tabs) .tabs-field__tab > .group-field > .group-field__wrap > .document-fields {
+    padding-top: 4px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .table {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .table tbody tr:nth-child(odd) {
+    background: transparent;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .table tbody tr:hover {
+    background: #f9fafb;
+  }
+
+  body:has(.nav):not(:has(.login__form)) input,
+  body:has(.nav):not(:has(.login__form)) textarea,
+  body:has(.nav):not(:has(.login__form)) .rs__control {
+    min-height: 40px;
+    border-color: var(--highlight-admin-border);
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: none;
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      background 160ms ease;
+  }
+
+  body:has(.nav):not(:has(.login__form)) textarea {
+    min-height: 74px;
+    resize: vertical;
+  }
+
+  body:has(.nav):not(:has(.login__form)) input:hover,
+  body:has(.nav):not(:has(.login__form)) textarea:hover,
+  body:has(.nav):not(:has(.login__form)) .rs__control:hover {
+    border-color: #cfd6df;
+    background: #fffefe;
+  }
+
+  body:has(.nav):not(:has(.login__form)) input:focus,
+  body:has(.nav):not(:has(.login__form)) textarea:focus,
+  body:has(.nav):not(:has(.login__form)) .rs__control--is-focused {
+    border-color: var(--highlight-admin-brand);
+    box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.12);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .rs__value-container,
+  body:has(.nav):not(:has(.login__form)) .rs__input-container,
+  body:has(.nav):not(:has(.login__form)) .rs__single-value,
+  body:has(.nav):not(:has(.login__form)) .rs__placeholder {
+    color: var(--highlight-admin-text);
+    font-size: 14px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .rs__placeholder {
+    color: #6b7280;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .rs__menu {
+    z-index: calc(var(--z-modal) + 2);
+    overflow: hidden;
+    margin-top: 6px;
+    max-height: 188px;
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 9px;
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.11);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .rs__menu-list {
+    overflow-y: auto !important;
+    max-height: 180px !important;
+    padding-block: 4px;
+    border-radius: 8px;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .rs__option {
+    min-height: 30px;
+    padding: 6px 12px;
+    color: var(--highlight-admin-text);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .checkbox-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--highlight-admin-text);
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .checkbox-input:hover {
+    border-color: var(--highlight-admin-border);
+    background: #f9fafb;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .checkbox-input__input,
+  body:has(.nav):not(:has(.login__form)) input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    min-height: 18px;
+    border-radius: 5px;
+    accent-color: var(--highlight-admin-brand);
+  }
+
+  body:has(.nav):not(:has(.login__form)) .relationship-add-new,
+  body:has(.nav):not(:has(.login__form)) .upload-relationship-details__add-button,
+  body:has(.nav):not(:has(.login__form)) .btn--icon-style-without-border {
+    border-radius: 8px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .btn--style-primary,
+  body:has(.nav):not(:has(.login__form)) button.btn--style-primary {
+    --bg-color: var(--highlight-admin-brand);
+    --hover-bg: var(--highlight-admin-brand-dark);
+    --color: #ffffff;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .btn--style-secondary,
+  body:has(.nav):not(:has(.login__form)) .btn--style-subtle,
+  body:has(.nav):not(:has(.login__form)) .pill {
+    border-radius: 999px;
+  }
+
+  body:has(.nav):not(:has(.login__form)) .popup__content,
+  body:has(.nav):not(:has(.login__form)) .drawer__content {
+    border: 1px solid var(--highlight-admin-border);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(17, 24, 39, 0.14);
+  }
+
+  body:has(.nav):not(:has(.login__form)) ::selection {
+    background: rgba(255, 90, 31, 0.2);
+  }
+
+  .ambient-page {
+    isolation: isolate;
+  }
+
+  .ambient-page::after {
+    content: '';
+    position: fixed;
+    inset: auto 8% 6% auto;
+    z-index: -1;
+    width: 420px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 90, 31, 0.055), transparent 68%);
+    pointer-events: none;
+  }
+
+  .highlight-dashboard {
+    position: relative;
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: 40px clamp(24px, 3.4vw, 48px) 56px;
+  }
+
+  .highlight-dashboard__hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 150px;
+    padding: 28px 0 36px;
+    isolation: isolate;
+  }
+
+  .highlight-dashboard__hero::before {
+    content: '';
+    position: absolute;
+    inset: -70px auto auto -86px;
+    z-index: -1;
+    width: min(560px, 70vw);
+    height: 260px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 90, 31, 0.16), transparent 62%);
+    filter: blur(6px);
+    opacity: 0.78;
+    animation: highlightAmbientPulse 11s ease-in-out infinite alternate;
+  }
+
+  .highlight-dashboard__hero h1 {
+    margin: 0;
+    font-size: clamp(30px, 3vw, 38px);
+    line-height: 1.12;
+  }
+
+  .highlight-dashboard__hero p:last-child {
+    max-width: 680px;
+    margin: 12px 0 0;
+    color: var(--highlight-admin-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .highlight-dashboard__primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: var(--highlight-admin-brand);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 750;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+    white-space: nowrap;
+  }
+
+  .highlight-dashboard__primary-action:hover,
+  .highlight-dashboard__primary-action:focus-visible {
+    background: var(--highlight-admin-brand-dark);
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .highlight-dashboard__eyebrow {
+    margin: 0 0 8px;
+    color: var(--highlight-admin-brand);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .highlight-dashboard__section {
+    margin-top: 8px;
+  }
+
+  .highlight-dashboard__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .highlight-dashboard__section-header h2 {
+    margin: 0;
+    color: var(--highlight-admin-text);
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .highlight-dashboard__metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: hidden;
+    border-block: 1px solid var(--highlight-admin-border);
+    background: rgba(255, 255, 255, 0.44);
+  }
+
+  .highlight-dashboard__metric {
+    min-height: 132px;
+    padding: 22px 24px;
+    border-right: 1px solid var(--highlight-admin-border);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.22));
+  }
+
+  .highlight-dashboard__metric:last-child {
+    border-right: 0;
+  }
+
+  .highlight-dashboard__metric h3 {
+    margin: 10px 0 0;
+    color: var(--highlight-admin-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .highlight-dashboard__metric strong {
+    display: block;
+    color: var(--highlight-admin-text);
+    font-size: clamp(34px, 4vw, 48px);
+    font-weight: 780;
+    line-height: 1;
+  }
+
+  .highlight-dashboard__metric p {
+    margin: 10px 0 0;
+    color: var(--highlight-admin-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .highlight-dashboard__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    gap: clamp(28px, 4vw, 56px);
+    margin-top: 36px;
+  }
+
+  .highlight-dashboard__activity,
+  .highlight-dashboard__quick-actions {
+    min-width: 0;
+  }
+
+  .highlight-dashboard__quick-actions {
+    padding-left: clamp(20px, 3vw, 32px);
+    border-left: 1px solid var(--highlight-admin-border);
+  }
+
+  .highlight-dashboard__actions {
+    display: grid;
+    gap: 4px;
+  }
+
+  .highlight-dashboard__action {
+    display: grid;
+    grid-template-columns: 30px 1fr 16px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+    border-radius: 8px;
+    color: var(--highlight-admin-text);
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .highlight-dashboard__action:hover,
+  .highlight-dashboard__action:focus-visible {
+    background: rgba(255, 90, 31, 0.055);
+    color: var(--highlight-admin-text);
+    text-decoration: none;
+  }
+
+  .highlight-dashboard__action-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: #ffffff;
+    color: var(--highlight-admin-muted);
+    font-size: 14px;
+    font-weight: 800;
+    transition:
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .highlight-dashboard__action:hover .highlight-dashboard__action-icon,
+  .highlight-dashboard__action:focus-visible .highlight-dashboard__action-icon {
+    background: var(--highlight-admin-brand-soft);
+    color: var(--highlight-admin-brand);
+  }
+
+  .highlight-dashboard__action-copy strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 720;
+  }
+
+  .highlight-dashboard__action-copy small {
+    display: block;
+    margin-top: 3px;
+    color: var(--highlight-admin-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .highlight-dashboard__action-arrow {
+    color: var(--highlight-admin-muted);
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .highlight-dashboard__action:hover .highlight-dashboard__action-arrow,
+  .highlight-dashboard__action:focus-visible .highlight-dashboard__action-arrow {
+    color: var(--highlight-admin-brand);
+    transform: translateX(3px);
+  }
+
+  .highlight-dashboard__empty {
+    position: relative;
+    max-width: 560px;
+    min-height: 120px;
+    padding: 20px 0 20px 28px;
+    border-left: 1px solid var(--highlight-admin-border);
+    text-align: left;
+  }
+
+  .highlight-dashboard__empty span {
+    position: absolute;
+    top: 26px;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--highlight-admin-brand);
+    box-shadow: 0 0 0 5px rgba(255, 90, 31, 0.1);
+  }
+
+  .highlight-dashboard__empty h3 {
+    margin: 14px 0 0;
+    color: var(--highlight-admin-text);
+    font-size: 16px;
+  }
+
+  @keyframes highlightAmbientPulse {
+    from {
+      opacity: 0.62;
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      opacity: 0.84;
+      transform: translate3d(18px, 8px, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .highlight-dashboard__hero::before {
+      animation: none;
+    }
+  }
+
+  .highlight-dashboard__empty p {
+    max-width: 360px;
+    margin: 8px 0 0;
+    color: var(--highlight-admin-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1180px) {
+    .highlight-dashboard__metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .highlight-dashboard__grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .highlight-dashboard__quick-actions {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 760px) {
+    body:has(.nav):not(:has(.login__form)) {
+      --highlight-admin-page-gutter: 16px;
+      --highlight-admin-header-height: 58px;
+    }
+
+    body:has(.nav):not(:has(.login__form)) .nav {
+      width: var(--nav-width);
+    }
+
+    body:has(.nav):not(:has(.login__form)) .app-header__wrapper {
+      gap: 10px;
+    }
+
+    body:has(.nav):not(:has(.login__form)) .app-header__localizer.localizer {
+      right: calc(var(--base) * 2);
+    }
+
+    body:has(.nav):not(:has(.login__form)) .step-nav {
+      overflow: hidden;
+    }
+
+    body:has(.nav):not(:has(.login__form)) .step-nav a,
+    body:has(.nav):not(:has(.login__form)) .step-nav span {
+      overflow: hidden;
+      max-width: 44vw;
+      text-overflow: ellipsis;
+    }
+
+    .highlight-dashboard {
+      padding: 24px 16px 36px;
+    }
+
+    .highlight-dashboard__hero {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-block: 18px 28px;
+    }
+
+    .highlight-dashboard__metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  body:has(.login__form) {
+    background: var(--highlight-white);
+  }
+
+  body:has(.login__form) .template-default {
+    min-height: 100svh;
+    background:
+      radial-gradient(circle at 16% 16%, rgba(255, 90, 31, 0.12), transparent 30%),
+      radial-gradient(circle at 88% 82%, rgba(255, 90, 31, 0.1), transparent 28%),
+      linear-gradient(135deg, #fffaf7 0%, #ffffff 45%, #fff3ea 100%);
+    color: var(--highlight-login-ink);
+    overflow-x: hidden;
+  }
+
+  body:has(.login__form) .template-default::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        rgba(255, 90, 31, 0.035) 0,
+        rgba(255, 90, 31, 0.035) 1px,
+        transparent 1px,
+        transparent 24px
+      );
+    mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  }
+
+  body:has(.login__form) .template-default__wrap {
+    display: block;
+    width: 100%;
+    min-height: 100svh;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+
+  body:has(.login__form) .template-default__wrap > * {
+    min-width: 0;
+  }
+
+  body:has(.login__form) .login__brand {
+    position: fixed;
+    top: 50%;
+    left: max(24px, calc(50vw - 560px));
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: clamp(420px, 47vw, 540px);
+    height: min(640px, calc(100svh - 56px));
+    padding: clamp(34px, 4vw, 54px);
+    border-radius: 18px 0 0 18px;
+    background:
+      linear-gradient(180deg, rgba(255, 83, 10, 0.08), rgba(182, 54, 0, 0.5)),
+      url('/admin-login-logo.jpg') center 40% / cover no-repeat;
+    box-shadow: -18px 30px 90px rgba(88, 38, 10, 0.16);
+    color: var(--highlight-white);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  body:has(.login__form) .login__brand::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 90, 31, 0) 0%, rgba(104, 31, 0, 0.12) 46%, rgba(69, 24, 4, 0.5) 100%),
+      linear-gradient(120deg, rgba(255, 255, 255, 0.22) 0%, transparent 36%);
+  }
+
+  body:has(.login__form) .login__brand::after {
+    content: 'Chào mừng trở lại\A Trang quản lý Highlight Media\A\A Quản trị nội dung, dự án, hình ảnh và ngôn ngữ website trong một không gian gọn gàng, hiện đại.';
+    position: relative;
+    z-index: 1;
+    max-width: 390px;
+    white-space: pre-line;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: clamp(15px, 1.25vw, 17px);
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.7;
+    text-shadow: 0 2px 18px rgba(55, 17, 0, 0.28);
+  }
+
+  body:has(.login__form) .login__brand svg,
+  body:has(.login__form) .login__brand .payload-logo,
+  body:has(.login__form) .login__brand [aria-label='Payload'] {
+    display: none;
+  }
+
+  body:has(.login__form) .login__form {
+    position: fixed;
+    top: 50%;
+    right: max(24px, calc(50vw - 560px));
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: center;
+    width: clamp(380px, 40vw, 500px);
+    height: min(640px, calc(100svh - 56px));
+    padding: clamp(38px, 5vw, 64px);
+    border: 1px solid rgba(255, 90, 31, 0.14);
+    border-left: 0;
+    border-radius: 0 18px 18px 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 247, 0.96));
+    box-shadow: 24px 30px 90px rgba(88, 38, 10, 0.12);
+    backdrop-filter: blur(20px);
+  }
+
+  body:has(.login__form) .login__form::before {
+    content: 'Đăng nhập quản trị';
+    order: -2;
+    color: var(--highlight-login-ink);
+    font-size: clamp(28px, 2.8vw, 36px);
+    font-weight: 750;
+    letter-spacing: 0;
+    line-height: 1.12;
+  }
+
+  body:has(.login__form) .login__form::after {
+    content: 'Sử dụng tài khoản được cấp để quản lý nội dung website.';
+    order: -1;
+    max-width: 370px;
+    margin-top: -10px;
+    margin-bottom: 18px;
+    color: var(--highlight-login-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  body:has(.login__form) .login__form__inputWrap {
+    gap: 16px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  body:has(.login__form) .login__form label,
+  body:has(.login__form) .login__form .field-label {
+    color: var(--highlight-login-ink);
+    font-size: 13px;
+    font-weight: 650;
+  }
+
+  body:has(.login__form) .login__form input {
+    min-height: 54px;
+    border: 1px solid #f0cdbb;
+    border-radius: 12px;
+    background: rgba(255, 250, 247, 0.85);
+    color: var(--highlight-login-ink);
+    font-size: 15px;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      background 160ms ease;
+  }
+
+  body:has(.login__form) .login__form input:hover {
+    border-color: #ffb98d;
+    background: #ffffff;
+  }
+
+  body:has(.login__form) .login__form input:focus,
+  body:has(.login__form) .login__form input:focus-visible {
+    border-color: var(--highlight-admin-brand);
+    box-shadow:
+      0 0 0 4px rgba(255, 90, 31, 0.13),
+      0 12px 30px rgba(255, 90, 31, 0.08);
+    outline: none;
+  }
+
+  body:has(.login__form) .login__form a {
+    width: fit-content;
+    color: var(--highlight-admin-brand-dark);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  body:has(.login__form) .login__form a:hover {
+    color: var(--highlight-admin-brand);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  body:has(.login__form) .login__form .btn,
+  body:has(.login__form) .login__form button[type='submit'] {
+    width: 100%;
+    min-height: 54px;
+    margin-block: 12px 0;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff6a18 0%, #ff4f05 58%, #e54800 100%);
+    color: var(--highlight-white);
+    font-weight: 800;
+    box-shadow: 0 18px 34px rgba(255, 90, 31, 0.22);
+  }
+
+  body:has(.login__form) .login__form .btn__content {
+    font-weight: 800;
+  }
+
+  body:has(.login__form) .login__form .btn:hover,
+  body:has(.login__form) .login__form .btn:focus-visible,
+  body:has(.login__form) .login__form button[type='submit']:hover,
+  body:has(.login__form) .login__form button[type='submit']:focus-visible {
+    background: linear-gradient(135deg, #ff7a2f 0%, #ff5a1f 58%, #d94b00 100%);
+    color: var(--highlight-white);
+    transform: translateY(-2px);
+    box-shadow: 0 22px 42px rgba(255, 90, 31, 0.28);
+  }
+
+  body:has(.login__form) .Toastify__toast,
+  body:has(.login__form) [role='status'] {
+    border: 1px solid var(--highlight-login-border);
+    border-radius: 8px;
+    background: #fff8f3;
+    color: var(--highlight-login-ink);
+  }
+
+  @media (max-width: 960px) {
+    body:has(.login__form) .template-default {
+      background: linear-gradient(180deg, #ffffff 0%, #fff4ec 100%);
+    }
+
+    body:has(.login__form) .template-default__wrap {
+      display: grid;
+      width: min(100%, calc(100vw - 32px));
+      max-width: 520px;
+      min-height: auto;
+      margin: 0 auto;
+      padding: 16px 0 32px;
+    }
+
+    body:has(.login__form) .login__brand {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
+      height: auto;
+      min-height: 320px;
+      padding: 28px;
+      border-radius: 18px 18px 0 0;
+    }
+
+    body:has(.login__form) .login__brand::after {
+      font-size: 15px;
+    }
+
+    body:has(.login__form) .login__form {
+      position: relative;
+      top: auto;
+      right: auto;
+      transform: none;
+      width: 100%;
+      height: auto;
+      min-height: auto;
+      padding: 28px;
+      border-top: 0;
+      border-left: 1px solid rgba(255, 90, 31, 0.18);
+      border-radius: 0 0 18px 18px;
+    }
+  }
 }

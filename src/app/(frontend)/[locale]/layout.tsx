@@ -1,10 +1,11 @@
+import type { Metadata } from 'next'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-import { routing } from '@/i18n/routing'
+import { routing, type AppLocale } from '@/i18n/routing'
 import '@/styles/globals.css'
 
 const inter = Inter({
@@ -24,19 +25,30 @@ type LocaleLayoutProps = {
   params: Promise<{ locale: string }>
 }
 
+export const metadata: Metadata = {
+  title: {
+    default: 'Highlight Media',
+    template: '%s | Highlight Media',
+  },
+}
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+function resolveLocale(locale: string): AppLocale {
+  if (!hasLocale(routing.locales, locale)) {
+    notFound()
+  }
+
+  return locale
 }
 
 export default async function LocaleLayout({
   children,
   params,
 }: LocaleLayoutProps) {
-  const { locale } = await params
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound()
-  }
+  const locale = resolveLocale((await params).locale)
 
   setRequestLocale(locale)
 
@@ -46,7 +58,9 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${spaceGrotesk.variable}`}
     >
       <body className="overflow-x-clip">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   )

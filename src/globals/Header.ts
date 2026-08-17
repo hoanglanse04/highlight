@@ -1,8 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
 import {
-  collapsibleGroup,
   ctaField,
+  groupedTab,
   mediaRelationship,
   navigationLinkFields,
 } from '@/fields/shared'
@@ -23,10 +23,13 @@ export const Header: GlobalConfig<'header'> = {
   hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
-    collapsibleGroup(
-      'branding',
-      'Thương hiệu và hành vi',
-      [
+    {
+      type: 'tabs',
+      admin: {
+        className: 'highlight-global-tabs',
+      },
+      tabs: [
+        groupedTab('branding', 'Thương hiệu và hành vi', [
         mediaRelationship('logoLight', 'Logo nền tối'),
         mediaRelationship('logoDark', 'Logo nền sáng'),
         {
@@ -50,13 +53,8 @@ export const Header: GlobalConfig<'header'> = {
           label: 'Hiển thị nút chuyển ngôn ngữ',
           defaultValue: true,
         },
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup(
-      'navigation',
-      'Điều hướng',
-      [
+      ]),
+        groupedTab('navigation', 'Điều hướng', [
         {
           name: 'items',
           type: 'array',
@@ -68,11 +66,11 @@ export const Header: GlobalConfig<'header'> = {
           },
           fields: navigationLinkFields({ includeInternalName: true }),
         },
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup('cta', 'CTA đầu trang', [
+      ]),
+        groupedTab('cta', 'CTA đầu trang', [
       ctaField('button', 'Nút CTA', { includeEnabled: true }),
     ]),
+      ],
+    },
   ],
 }

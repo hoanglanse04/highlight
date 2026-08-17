@@ -92,5 +92,48 @@
     "listingSeoDescription": "Danh sách dự án phim, hình ảnh và nội dung sáng tạo của Highlight Production.",
     "notFoundTitle": "Không tìm thấy dự án",
     "notFoundDescription": "Dự án không tồn tại, chưa được xuất bản hoặc đã ngừng hiển thị."
+  },
+  "AdminCMS": {
+    "dashboardLabel": "Dashboard",
+    "title": "Tổng quan",
+    "subtitle": "Quản lý nội dung website, dự án và hình ảnh trong một không gian tập trung.",
+    "contentOverview": "Tổng quan",
+    "quickActions": "Thao tác nhanh",
+    "activityTitle": "Hoạt động gần đây",
+    "activityEmpty": "Chưa có hoạt động",
+    "activityEmptyDescription": "Các thay đổi mới sẽ xuất hiện ở đây khi hệ thống có activity log.",
+    "unavailable": "Không thể tải chỉ số",
+    "metrics": {
+      "projects": {
+        "title": "Dự án",
+        "helper": "Bản nháp và đã xuất bản"
+      },
+      "categories": {
+        "title": "Danh mục dự án",
+        "helper": "Phân loại nội dung"
+      },
+      "media": {
+        "title": "Hình ảnh",
+        "helper": "Tài nguyên media"
+      },
+      "website": {
+        "title": "Nội dung website",
+        "helper": "Trang chủ và cấu hình"
+      }
+    },
+    "actions": {
+      "newProject": {
+        "label": "Tạo dự án",
+        "description": "Tạo dự án mới"
+      },
+      "uploadMedia": {
+        "label": "Upload hình ảnh",
+        "description": "Thêm tài nguyên vào thư viện"
+      },
+      "editHomepage": {
+        "label": "Chỉnh sửa trang chủ",
+        "description": "Quản lý nội dung homepage"
+      }
+    }
   }
 }

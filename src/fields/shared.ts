@@ -15,8 +15,11 @@ type CTAOptions = {
 type SectionHeadingOptions = {
   defaultEnabled?: boolean
   descriptionRequired?: boolean
+  enabledLabel?: string
   titleRequired?: boolean
 }
+
+type GroupedTab = Extract<Field, { type: 'tabs' }>['tabs'][number]
 
 export function mediaRelationship(
   name: string,
@@ -33,11 +36,11 @@ export function mediaRelationship(
   }
 }
 
-export function enabledField(defaultValue = true): Field {
+export function enabledField(defaultValue = true, label = 'Bật hiển thị'): Field {
   return {
     name: 'enabled',
     type: 'checkbox',
-    label: 'Bật hiển thị',
+    label,
     defaultValue,
     admin: {
       description: 'Nội dung bị tắt vẫn được giữ trong CMS nhưng không hiển thị ngoài website.',
@@ -62,7 +65,7 @@ export function displayOrderField(): Field {
 
 export function sectionHeadingFields(options: SectionHeadingOptions = {}): Field[] {
   return [
-    enabledField(options.defaultEnabled ?? true),
+    enabledField(options.defaultEnabled ?? true, options.enabledLabel),
     {
       name: 'eyebrow',
       type: 'text',
@@ -109,6 +112,29 @@ export function collapsibleGroup(
         admin: {
           description: options.description,
           initCollapsed: options.initCollapsed ?? true,
+        },
+        fields,
+      },
+    ],
+  }
+}
+
+export function groupedTab(
+  name: string,
+  label: string,
+  fields: Field[],
+  options: { description?: string } = {},
+): GroupedTab {
+  return {
+    label,
+    admin: options.description ? { description: options.description } : undefined,
+    fields: [
+      {
+        name,
+        type: 'group',
+        label: false,
+        admin: {
+          hideGutter: true,
         },
         fields,
       },

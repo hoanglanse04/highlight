@@ -92,5 +92,48 @@
     "listingSeoDescription": "Film, photography and creative content projects by Highlight Production.",
     "notFoundTitle": "Project not found",
     "notFoundDescription": "This project does not exist, is not published, or is no longer visible."
+  },
+  "AdminCMS": {
+    "dashboardLabel": "Dashboard",
+    "title": "Overview",
+    "subtitle": "Manage website content, projects and media from one focused workspace.",
+    "contentOverview": "Overview",
+    "quickActions": "Quick actions",
+    "activityTitle": "Recent activity",
+    "activityEmpty": "No activity yet",
+    "activityEmptyDescription": "New changes will appear here when an activity log is available.",
+    "unavailable": "Unable to load metric",
+    "metrics": {
+      "projects": {
+        "title": "Projects",
+        "helper": "Drafts and published"
+      },
+      "categories": {
+        "title": "Project categories",
+        "helper": "Content taxonomy"
+      },
+      "media": {
+        "title": "Images",
+        "helper": "Media assets"
+      },
+      "website": {
+        "title": "Website content",
+        "helper": "Homepage and settings"
+      }
+    },
+    "actions": {
+      "newProject": {
+        "label": "Create project",
+        "description": "Create a new project"
+      },
+      "uploadMedia": {
+        "label": "Upload image",
+        "description": "Add assets to the library"
+      },
+      "editHomepage": {
+        "label": "Edit homepage",
+        "description": "Manage homepage content"
+      }
+    }
   }
 }

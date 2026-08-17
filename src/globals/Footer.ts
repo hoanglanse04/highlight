@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import {
-  collapsibleGroup,
+  groupedTab,
   mediaRelationship,
   navigationLinkFields,
 } from '@/fields/shared'
@@ -23,10 +23,13 @@ export const Footer: GlobalConfig<'footer'> = {
   hooks: websiteGlobalHooks,
   versions: websiteGlobalVersions,
   fields: [
-    collapsibleGroup(
-      'branding',
-      'Thương hiệu',
-      [
+    {
+      type: 'tabs',
+      admin: {
+        className: 'highlight-global-tabs',
+      },
+      tabs: [
+        groupedTab('branding', 'Thương hiệu', [
         mediaRelationship('logo', 'Logo chân trang'),
         {
           name: 'shortDescription',
@@ -36,13 +39,8 @@ export const Footer: GlobalConfig<'footer'> = {
           maxLength: 500,
         },
         mediaRelationship('backgroundImage', 'Ảnh nền'),
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup(
-      'navigation',
-      'Các cột điều hướng',
-      [
+      ]),
+        groupedTab('navigation', 'Các cột điều hướng', [
         {
           name: 'columns',
           type: 'array',
@@ -68,10 +66,8 @@ export const Footer: GlobalConfig<'footer'> = {
             },
           ],
         },
-      ],
-      { initCollapsed: false },
-    ),
-    collapsibleGroup('contact', 'Liên hệ', [
+      ]),
+        groupedTab('contact', 'Liên hệ', [
       {
         name: 'email',
         type: 'email',
@@ -92,7 +88,7 @@ export const Footer: GlobalConfig<'footer'> = {
         maxLength: 500,
       },
     ]),
-    collapsibleGroup('legal', 'Pháp lý', [
+        groupedTab('legal', 'Pháp lý', [
       {
         name: 'copyright',
         type: 'text',
@@ -101,5 +97,7 @@ export const Footer: GlobalConfig<'footer'> = {
         maxLength: 240,
       },
     ]),
+      ],
+    },
   ],
 }
