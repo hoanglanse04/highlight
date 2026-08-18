@@ -287,6 +287,7 @@ export const socialPlatformOptions = [
   { label: 'Facebook', value: 'facebook' },
   { label: 'Instagram', value: 'instagram' },
   { label: 'TikTok', value: 'tiktok' },
+  { label: 'Zalo', value: 'zalo' },
   { label: 'YouTube', value: 'youtube' },
   { label: 'Vimeo', value: 'vimeo' },
   { label: 'LinkedIn', value: 'linkedin' },

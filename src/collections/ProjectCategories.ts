@@ -27,6 +27,14 @@ export const ProjectCategories: CollectionConfig<'project-categories'> = {
     delete: contentEditors,
   },
   admin: {
+    components: {
+      beforeListTable: [
+        {
+          path: '@/components/admin/CreateCategoryModal',
+          exportName: 'CreateCategoryModal',
+        },
+      ],
+    },
     group: 'Dự án',
     useAsTitle: 'internalName',
     defaultColumns: ['title', 'slug', 'displayOrder', 'enabled', 'updatedAt'],

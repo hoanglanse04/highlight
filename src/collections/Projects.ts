@@ -137,6 +137,14 @@ export const Projects: CollectionConfig<'projects'> = {
     delete: contentEditors,
   },
   admin: {
+    components: {
+      beforeListTable: [
+        {
+          path: '@/components/admin/CreateProjectModal',
+          exportName: 'CreateProjectModal',
+        },
+      ],
+    },
     group: 'Dự án',
     useAsTitle: 'internalName',
     defaultColumns: [

@@ -1552,7 +1552,16 @@ export interface SiteSetting {
      */
     socialLinks?:
       | {
-          platform: 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'vimeo' | 'linkedin' | 'behance' | 'other';
+          platform:
+            | 'facebook'
+            | 'instagram'
+            | 'tiktok'
+            | 'zalo'
+            | 'youtube'
+            | 'vimeo'
+            | 'linkedin'
+            | 'behance'
+            | 'other';
           label?: string | null;
           url: string;
           /**

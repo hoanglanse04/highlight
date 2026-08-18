@@ -1,24 +1,32 @@
 import type { CollectionConfig } from 'payload'
 
 import {
-  createUsers,
   denyAccess,
   denyFieldAccess,
   readUsers,
+  superAdminsOnly,
   updateUsers,
 } from '@/access/users'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: 'Người dùng',
-    plural: 'Người dùng',
+    singular: 'Tài khoản',
+    plural: 'Tài khoản hệ thống',
   },
   admin: {
-    defaultColumns: ['email', 'name', 'role', 'updatedAt'],
+    components: {
+      beforeListTable: [
+        {
+          path: '@/components/admin/CreateUserModal',
+          exportName: 'CreateUserModal',
+        },
+      ],
+    },
+    defaultColumns: ['name', 'email', 'role', 'updatedAt'],
     group: 'Hệ thống',
-    hidden: true,
-    useAsTitle: 'email',
+    hidden: false,
+    useAsTitle: 'name',
   },
   auth: {
     maxLoginAttempts: 5,
@@ -26,7 +34,7 @@ export const Users: CollectionConfig = {
     tokenExpiration: 2 * 60 * 60,
   },
   access: {
-    create: createUsers,
+    create: superAdminsOnly,
     read: readUsers,
     update: updateUsers,
     delete: denyAccess,
@@ -37,6 +45,14 @@ export const Users: CollectionConfig = {
       type: 'text',
       label: 'Họ và tên',
       required: true,
+      admin: {
+        components: {
+          Cell: {
+            path: '@/components/admin/UserNameCell',
+            exportName: 'UserNameCell',
+          },
+        },
+      },
     },
     {
       name: 'role',

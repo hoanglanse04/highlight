@@ -53,25 +53,19 @@ export const authenticatedFieldAccess: FieldAccess = ({ req }) =>
 export const contentEditorFieldAccess: FieldAccess = ({ req }) =>
   canManageContent(req.user)
 
-// Highlight uses one seeded administrator account. Account creation and deletion
-// are intentionally unavailable through both the Admin UI and public APIs.
-export const createUsers: Access = () => false
+export const createUsers: Access = ({ req }) => isSuperAdmin(req.user)
 
 export const readUsers: Access = ({ req }) => {
-  if (!req.user) {
-    return false
-  }
-
-  return {
-    id: {
-      equals: req.user.id,
-    },
-  }
+  return isAuthenticated(req.user)
 }
 
 export const updateUsers: Access = ({ req }) => {
   if (!req.user) {
     return false
+  }
+
+  if (isSuperAdmin(req.user)) {
+    return true
   }
 
   return {

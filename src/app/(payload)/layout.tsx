@@ -8,6 +8,7 @@ import {
 } from '@payloadcms/next/layouts'
 import type { ReactNode } from 'react'
 
+import { PasswordToggle } from '@/components/admin/PasswordToggle'
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
 
@@ -28,6 +29,7 @@ const serverFunction: ServerFunctionClient = async (args) => {
 export default function PayloadLayout({ children }: PayloadLayoutProps) {
   return (
     <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+      <PasswordToggle />
       {children}
     </RootLayout>
   )

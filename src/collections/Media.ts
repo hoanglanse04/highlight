@@ -158,6 +158,14 @@ export const Media: CollectionConfig<'media'> = {
     plural: 'Thư viện ảnh',
   },
   admin: {
+    components: {
+      beforeListTable: [
+        {
+          path: '@/components/admin/CreateMediaModal',
+          exportName: 'CreateMediaModal',
+        },
+      ],
+    },
     defaultColumns: [
       'thumbnailURL',
       'internalTitle',
@@ -182,7 +190,7 @@ export const Media: CollectionConfig<'media'> = {
   upload: {
     adminThumbnail: 'thumbnail',
     allowRestrictedFileTypes: false,
-    bulkUpload: true,
+    bulkUpload: false,
     constructorOptions: {
       failOn: 'warning',
       limitInputPixels: MAX_INPUT_PIXELS,

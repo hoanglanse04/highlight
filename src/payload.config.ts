@@ -28,10 +28,20 @@ export default buildConfig({
       },
     },
     components: {
+      beforeLogin: [
+        {
+          path: '@/components/admin/PasswordToggle',
+          exportName: 'PasswordToggle',
+        },
+      ],
       beforeNavLinks: [
         {
           path: '@/components/admin/DashboardNavLink',
           exportName: 'DashboardNavLink',
+        },
+        {
+          path: '@/components/admin/ConfirmationEnhancer',
+          exportName: 'ConfirmationEnhancer',
         },
       ],
       views: {
@@ -89,13 +99,10 @@ export default buildConfig({
   sharp,
   upload: {
     abortOnLimit: true,
-    createParentPath: true,
     limits: {
       fileSize: 15 * 1024 * 1024,
       files: 1,
     },
-    tempFileDir: '/tmp/payload-uploads',
-    useTempFiles: true,
   },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
