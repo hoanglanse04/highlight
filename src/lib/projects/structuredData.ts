@@ -91,6 +91,86 @@ export function buildProjectJsonLd({
   }
 }
 
+export function buildProjectsBreadcrumbsJsonLd({
+  categoryTitle,
+  homeTitle,
+  locale,
+  projectsTitle,
+}: {
+  categoryTitle?: string
+  homeTitle: string
+  locale: AppLocale
+  projectsTitle: string
+}) {
+  const items = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: homeTitle,
+      item: absolutePath(`/${locale}`),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: projectsTitle,
+      item: absolutePath(getProjectsPath(locale)),
+    },
+  ]
+
+  if (categoryTitle) {
+    items.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: categoryTitle,
+      item: absolutePath(getProjectsPath(locale)),
+    })
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  }
+}
+
+export function buildProjectBreadcrumbsJsonLd({
+  homeTitle,
+  locale,
+  project,
+  projectsTitle,
+}: {
+  homeTitle: string
+  locale: AppLocale
+  project: PublicProject
+  projectsTitle: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: homeTitle,
+        item: absolutePath(`/${locale}`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: projectsTitle,
+        item: absolutePath(getProjectsPath(locale)),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: project.title,
+        item: absolutePath(getProjectPath(locale, project.slug)),
+      },
+    ],
+  }
+}
+
 export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, '\\u003c')
 }
+

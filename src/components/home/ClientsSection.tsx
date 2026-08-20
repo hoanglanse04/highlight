@@ -20,7 +20,14 @@ export function ClientsSection({
   if (!isSectionEnabled(section) || !items.length) return null
 
   return (
-    <section className="section-shell bg-[#111211]" id="clients">
+    <section
+      className="section-shell cinematic-bg-studio cinematic-grain relative overflow-hidden border-t border-white/[0.06]"
+      id="clients"
+    >
+      <div
+        aria-hidden="true"
+        className="cinematic-glow-spotlight bottom-0 left-1/4 h-[350px] w-[500px] bg-brand/[0.05]"
+      />
       <Container>
         <Reveal>
           {section?.eyebrow ? (

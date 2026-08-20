@@ -15,6 +15,7 @@
     "label": "Loading"
   },
   "HomepageUI": {
+    "home": "Home",
     "skipToContent": "Skip navigation and go to main content",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",

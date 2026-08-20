@@ -2,7 +2,7 @@
 
 import { useAuth } from '@payloadcms/ui'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 
 export function AccountDropdown() {
@@ -10,12 +10,12 @@ export function AccountDropdown() {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
   const dropdownRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.preventDefault()

@@ -32,7 +32,10 @@ import {
   isProjectsSegment,
 } from '@/lib/projects/routes'
 import { buildProjectMetadata } from '@/lib/projects/seo'
-import { buildProjectJsonLd } from '@/lib/projects/structuredData'
+import {
+  buildProjectBreadcrumbsJsonLd,
+  buildProjectJsonLd,
+} from '@/lib/projects/structuredData'
 import {
   getFooter,
   getHeader,
@@ -154,6 +157,14 @@ export default async function ProjectDetailPage({ params }: DetailPageProps) {
     >
       <ProjectJsonLd
         data={buildProjectJsonLd({ locale, project, settings })}
+      />
+      <ProjectJsonLd
+        data={buildProjectBreadcrumbsJsonLd({
+          homeTitle: homeT('home'),
+          locale,
+          project,
+          projectsTitle: t('title'),
+        })}
       />
       <ProjectHero
         labels={{

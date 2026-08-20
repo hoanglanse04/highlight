@@ -1,5 +1,6 @@
 import type { PaginatedDocs, PayloadRequest, Where } from 'payload'
 import { getPayload } from 'payload'
+import { cache } from 'react'
 
 import { isAuthenticated } from '@/access/users'
 import type { AppLocale } from '@/i18n/routing'
@@ -121,35 +122,96 @@ function mapCards(result: PaginatedDocs<Project>): PaginatedDocs<ProjectCard> {
   return { ...result, docs: result.docs.map(toProjectCard) }
 }
 
+const getProjectCategoriesCached = cache(
+  async (serializedOptions: string): Promise<PaginatedDocs<PublicProjectCategory>> => {
+    const options: GetProjectCategoriesOptions = JSON.parse(serializedOptions)
+    const payload = await getPayload({ config })
+    const where: Where = {
+      and: [
+        ...publicWhere(options.draft),
+        ...(options.featured === undefined
+          ? []
+          : [{ featured: { equals: options.featured } }]),
+      ],
+    }
+    const result = await payload.find({
+      collection: 'project-categories',
+      locale: options.locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      overrideAccess: false,
+      depth: 1,
+      page: options.page ?? 1,
+      limit: limitBetween(options.limit, 20, 100),
+      sort: ['displayOrder', 'title'],
+      where,
+    })
+
+    return { ...result, docs: result.docs.map(withoutInternalCategory) }
+  },
+)
+
 export async function getProjectCategories(
   options: GetProjectCategoriesOptions,
 ): Promise<PaginatedDocs<PublicProjectCategory>> {
   requireDraftRequest(options)
-  const payload = await getPayload({ config })
-  const where: Where = {
-    and: [
-      ...publicWhere(options.draft),
-      ...(options.featured === undefined
-        ? []
-        : [{ featured: { equals: options.featured } }]),
-    ],
-  }
-  const result = await payload.find({
-    collection: 'project-categories',
-    locale: options.locale,
-    fallbackLocale: 'vi',
-    draft: options.draft ?? false,
-    req: options.request,
-    overrideAccess: false,
-    depth: 1,
-    page: options.page ?? 1,
-    limit: limitBetween(options.limit, 20, 100),
-    sort: ['displayOrder', 'title'],
-    where,
-  })
+  if (options.request) {
+    const payload = await getPayload({ config })
+    const where: Where = {
+      and: [
+        ...publicWhere(options.draft),
+        ...(options.featured === undefined
+          ? []
+          : [{ featured: { equals: options.featured } }]),
+      ],
+    }
+    const result = await payload.find({
+      collection: 'project-categories',
+      locale: options.locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      req: options.request,
+      overrideAccess: false,
+      depth: 1,
+      page: options.page ?? 1,
+      limit: limitBetween(options.limit, 20, 100),
+      sort: ['displayOrder', 'title'],
+      where,
+    })
 
-  return { ...result, docs: result.docs.map(withoutInternalCategory) }
+    return { ...result, docs: result.docs.map(withoutInternalCategory) }
+  }
+
+  const key = JSON.stringify({
+    draft: Boolean(options.draft),
+    featured: options.featured,
+    limit: options.limit,
+    locale: options.locale,
+    page: options.page,
+  })
+  return getProjectCategoriesCached(key)
 }
+
+const getProjectCategoryBySlugCached = cache(
+  async (
+    slug: string,
+    locale: AppLocale,
+    draft: boolean,
+  ): Promise<PublicProjectCategory | null> => {
+    const payload = await getPayload({ config })
+    const found = await payload.find({
+      collection: 'project-categories',
+      locale,
+      fallbackLocale: 'vi',
+      draft,
+      overrideAccess: false,
+      depth: 1,
+      limit: 1,
+      where: { and: [...publicWhere(draft), { slug: { equals: slug } }] },
+    })
+    return found.docs[0] ? withoutInternalCategory(found.docs[0]) : null
+  },
+)
 
 export async function getProjectCategoryBySlug(
   slug: string,
@@ -157,19 +219,23 @@ export async function getProjectCategoryBySlug(
   options: ProjectDraftOptions = {},
 ): Promise<PublicProjectCategory | null> {
   requireDraftRequest(options)
-  const payload = await getPayload({ config })
-  const found = await payload.find({
-    collection: 'project-categories',
-    locale,
-    fallbackLocale: 'vi',
-    draft: options.draft ?? false,
-    req: options.request,
-    overrideAccess: false,
-    depth: 1,
-    limit: 1,
-    where: { and: [...publicWhere(options.draft), { slug: { equals: slug } }] },
-  })
-  return found.docs[0] ? withoutInternalCategory(found.docs[0]) : null
+  if (options.request) {
+    const payload = await getPayload({ config })
+    const found = await payload.find({
+      collection: 'project-categories',
+      locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      req: options.request,
+      overrideAccess: false,
+      depth: 1,
+      limit: 1,
+      where: { and: [...publicWhere(options.draft), { slug: { equals: slug } }] },
+    })
+    return found.docs[0] ? withoutInternalCategory(found.docs[0]) : null
+  }
+
+  return getProjectCategoryBySlugCached(slug, locale, Boolean(options.draft))
 }
 
 async function categoryIDBySlug(
@@ -181,76 +247,181 @@ async function categoryIDBySlug(
   return category?.id ?? null
 }
 
+const getProjectsCached = cache(
+  async (serializedOptions: string): Promise<PaginatedDocs<ProjectCard>> => {
+    const options: GetProjectsOptions = JSON.parse(serializedOptions)
+    const payload = await getPayload({ config })
+    const categoryID = options.categorySlug
+      ? await categoryIDBySlug(options.categorySlug, options.locale, options)
+      : null
+
+    if (options.categorySlug && categoryID === null) {
+      return {
+        docs: [],
+        hasNextPage: false,
+        hasPrevPage: false,
+        limit: limitBetween(options.limit, 12, 100),
+        nextPage: null,
+        page: 1,
+        pagingCounter: 1,
+        prevPage: null,
+        totalDocs: 0,
+        totalPages: 0,
+      }
+    }
+
+    const filters: Where[] = [...publicWhere(options.draft)]
+    if (options.featured !== undefined) filters.push({ featured: { equals: options.featured } })
+    if (options.year !== undefined) filters.push({ year: { equals: options.year } })
+    if (categoryID !== null) {
+      filters.push({
+        or: [
+          { primaryCategory: { equals: categoryID } },
+          { secondaryCategories: { contains: categoryID } },
+        ],
+      })
+    }
+
+    const result = await payload.find({
+      collection: 'projects',
+      locale: options.locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      overrideAccess: false,
+      depth: 1,
+      page: options.page ?? 1,
+      limit: limitBetween(options.limit, 12, 100),
+      sort: projectSort[options.sort ?? 'newest'],
+      where: { and: filters },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        shortDescription: true,
+        primaryCategory: true,
+        coverImage: true,
+        posterImage: true,
+        heroMediaType: true,
+        hoverPreviewVideoURL: true,
+        externalVideoURL: true,
+        videoPoster: true,
+        clientName: true,
+        artistName: true,
+        year: true,
+        featured: true,
+        featuredOrder: true,
+      },
+    })
+
+    return mapCards(result as unknown as PaginatedDocs<Project>)
+  },
+)
+
 export async function getProjects(
   options: GetProjectsOptions,
 ): Promise<PaginatedDocs<ProjectCard>> {
   requireDraftRequest(options)
-  const payload = await getPayload({ config })
-  const categoryID = options.categorySlug
-    ? await categoryIDBySlug(options.categorySlug, options.locale, options)
-    : null
+  if (options.request) {
+    const payload = await getPayload({ config })
+    const categoryID = options.categorySlug
+      ? await categoryIDBySlug(options.categorySlug, options.locale, options)
+      : null
 
-  if (options.categorySlug && categoryID === null) {
-    return {
-      docs: [],
-      hasNextPage: false,
-      hasPrevPage: false,
-      limit: limitBetween(options.limit, 12, 100),
-      nextPage: null,
-      page: 1,
-      pagingCounter: 1,
-      prevPage: null,
-      totalDocs: 0,
-      totalPages: 0,
+    if (options.categorySlug && categoryID === null) {
+      return {
+        docs: [],
+        hasNextPage: false,
+        hasPrevPage: false,
+        limit: limitBetween(options.limit, 12, 100),
+        nextPage: null,
+        page: 1,
+        pagingCounter: 1,
+        prevPage: null,
+        totalDocs: 0,
+        totalPages: 0,
+      }
     }
-  }
 
-  const filters: Where[] = [...publicWhere(options.draft)]
-  if (options.featured !== undefined) filters.push({ featured: { equals: options.featured } })
-  if (options.year !== undefined) filters.push({ year: { equals: options.year } })
-  if (categoryID !== null) {
-    filters.push({
-      or: [
-        { primaryCategory: { equals: categoryID } },
-        { secondaryCategories: { contains: categoryID } },
-      ],
+    const filters: Where[] = [...publicWhere(options.draft)]
+    if (options.featured !== undefined) filters.push({ featured: { equals: options.featured } })
+    if (options.year !== undefined) filters.push({ year: { equals: options.year } })
+    if (categoryID !== null) {
+      filters.push({
+        or: [
+          { primaryCategory: { equals: categoryID } },
+          { secondaryCategories: { contains: categoryID } },
+        ],
+      })
+    }
+
+    const result = await payload.find({
+      collection: 'projects',
+      locale: options.locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      req: options.request,
+      overrideAccess: false,
+      depth: 1,
+      page: options.page ?? 1,
+      limit: limitBetween(options.limit, 12, 100),
+      sort: projectSort[options.sort ?? 'newest'],
+      where: { and: filters },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        shortDescription: true,
+        primaryCategory: true,
+        coverImage: true,
+        posterImage: true,
+        heroMediaType: true,
+        hoverPreviewVideoURL: true,
+        externalVideoURL: true,
+        videoPoster: true,
+        clientName: true,
+        artistName: true,
+        year: true,
+        featured: true,
+        featuredOrder: true,
+      },
     })
+
+    return mapCards(result as unknown as PaginatedDocs<Project>)
   }
 
-  const result = await payload.find({
-    collection: 'projects',
+  const key = JSON.stringify({
+    categorySlug: options.categorySlug,
+    draft: Boolean(options.draft),
+    featured: options.featured,
+    limit: options.limit,
     locale: options.locale,
-    fallbackLocale: 'vi',
-    draft: options.draft ?? false,
-    req: options.request,
-    overrideAccess: false,
-    depth: 1,
-    page: options.page ?? 1,
-    limit: limitBetween(options.limit, 12, 100),
-    sort: projectSort[options.sort ?? 'newest'],
-    where: { and: filters },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      shortDescription: true,
-      primaryCategory: true,
-      coverImage: true,
-      posterImage: true,
-      heroMediaType: true,
-      hoverPreviewVideoURL: true,
-      externalVideoURL: true,
-      videoPoster: true,
-      clientName: true,
-      artistName: true,
-      year: true,
-      featured: true,
-      featuredOrder: true,
-    },
+    page: options.page,
+    sort: options.sort,
+    year: options.year,
   })
-
-  return mapCards(result as unknown as PaginatedDocs<Project>)
+  return getProjectsCached(key)
 }
+
+const getProjectBySlugCached = cache(
+  async (
+    slug: string,
+    locale: AppLocale,
+    draft: boolean,
+  ): Promise<PublicProject | null> => {
+    const payload = await getPayload({ config })
+    const result = await payload.find({
+      collection: 'projects',
+      locale,
+      fallbackLocale: 'vi',
+      draft,
+      overrideAccess: false,
+      depth: 1,
+      limit: 1,
+      where: { and: [...publicWhere(draft), { slug: { equals: slug } }] },
+    })
+    return result.docs[0] ? withoutInternalProject(result.docs[0]) : null
+  },
+)
 
 export async function getProjectBySlug(
   slug: string,
@@ -258,19 +429,23 @@ export async function getProjectBySlug(
   options: ProjectDraftOptions = {},
 ): Promise<PublicProject | null> {
   requireDraftRequest(options)
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'projects',
-    locale,
-    fallbackLocale: 'vi',
-    draft: options.draft ?? false,
-    req: options.request,
-    overrideAccess: false,
-    depth: 1,
-    limit: 1,
-    where: { and: [...publicWhere(options.draft), { slug: { equals: slug } }] },
-  })
-  return result.docs[0] ? withoutInternalProject(result.docs[0]) : null
+  if (options.request) {
+    const payload = await getPayload({ config })
+    const result = await payload.find({
+      collection: 'projects',
+      locale,
+      fallbackLocale: 'vi',
+      draft: options.draft ?? false,
+      req: options.request,
+      overrideAccess: false,
+      depth: 1,
+      limit: 1,
+      where: { and: [...publicWhere(options.draft), { slug: { equals: slug } }] },
+    })
+    return result.docs[0] ? withoutInternalProject(result.docs[0]) : null
+  }
+
+  return getProjectBySlugCached(slug, locale, Boolean(options.draft))
 }
 
 export function getFeaturedProjects(

@@ -1,17 +1,17 @@
 'use client'
 
 import type { DefaultCellComponentProps } from 'payload'
-import React, { useEffect, useState } from 'react'
+import React, { useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 
 export function UserNameCell(props: DefaultCellComponentProps) {
   const { cellData, rowData } = props
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
 
   const name =
     typeof cellData === 'string' && cellData.trim() !== ''

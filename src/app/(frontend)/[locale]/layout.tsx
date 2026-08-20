@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { routing, type AppLocale } from '@/i18n/routing'
+import { getSiteURL } from '@/lib/seo/homepage'
 import '@/styles/globals.css'
 
 const inter = Inter({
@@ -26,6 +27,7 @@ type LocaleLayoutProps = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: getSiteURL() ?? undefined,
   title: {
     default: 'Highlight Media',
     template: '%s | Highlight Media',

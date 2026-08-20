@@ -1,16 +1,11 @@
 import createMiddleware from 'next-intl/middleware'
 import { type NextRequest, NextResponse } from 'next/server'
-import { getPayload, type PayloadRequest } from 'payload'
 
 import enMessages from '../messages/en.json'
 import viMessages from '../messages/vi.json'
-import { isAuthenticated } from '@/access/users'
 import { isSafeProjectSlug } from '@/fields/projectSlug'
 import { routing } from '@/i18n/routing'
-import { getProjectBySlug, getProjects } from '@/lib/payload/projects'
-import { parseProjectListingQuery } from '@/lib/projects/queryParams'
 import { getProjectsSegment } from '@/lib/projects/routes'
-import payloadConfig from '@payload-config'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -48,23 +43,7 @@ a:focus-visible{outline:2px solid #fff;outline-offset:4px}
   })
 }
 
-async function hasAuthenticatedDraft(request: NextRequest): Promise<boolean> {
-  if (!request.cookies.has('__prerender_bypass')) return false
-  const payload = await getPayload({ config: payloadConfig })
-  const payloadRequest = {
-    headers: request.headers,
-    payload,
-  } as unknown as PayloadRequest
-  const { user } = await payload.auth({
-    headers: request.headers,
-    req: payloadRequest,
-  })
-  return isAuthenticated(user)
-}
-
-async function projectRouteResponse(
-  request: NextRequest,
-): Promise<NextResponse | null> {
+function projectRouteResponse(request: NextRequest): NextResponse | null {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean)
   const locale = segments[0]
   if (locale !== 'vi' && locale !== 'en') return null
@@ -78,45 +57,18 @@ async function projectRouteResponse(
   }
   if (requestedSegment !== expectedSegment) return null
   if (segments.length > 3) return notFoundResponse(locale)
-  if (await hasAuthenticatedDraft(request)) return null
 
   if (segments.length === 3) {
     const slug = segments[2]
     if (!isSafeProjectSlug(slug)) return notFoundResponse(locale)
-    const project = await getProjectBySlug(slug, locale)
-    if (!project) return notFoundResponse(locale)
-    return null
-  }
-
-  if (segments.length === 2) {
-    const query = parseProjectListingQuery(
-      Object.fromEntries(request.nextUrl.searchParams.entries()),
-    )
-    if (query.categoryIsMalformed || query.page === 1) return null
-    const projects = await getProjects({
-      categorySlug: query.category,
-      limit: 12,
-      locale,
-      page: query.page,
-      sort: query.sort,
-    })
-    if (projects.totalPages > 0 && query.page > projects.totalPages) {
-      return notFoundResponse(locale)
-    }
   }
 
   return null
 }
 
-export default async function proxy(request: NextRequest) {
-  try {
-    const response = await projectRouteResponse(request)
-    if (response) return response
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Project route preflight failed; deferring to the page.', error)
-    }
-  }
+export default function proxy(request: NextRequest) {
+  const response = projectRouteResponse(request)
+  if (response) return response
 
   return intlMiddleware(request)
 }

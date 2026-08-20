@@ -37,16 +37,25 @@ export function AboutGallery({
   }, [groupCount, reducedMotion])
 
   if (!images.length) {
-    return <div className="h-[36rem] bg-surface lg:h-[60rem]" />
+    return <div className="h-[36rem] rounded-xl bg-surface lg:h-[60rem]" />
   }
 
   return (
-    <div>
-      <div className="relative h-[36rem] overflow-hidden sm:h-[46rem] lg:h-[60rem]">
+    <div className="cinematic-gallery-container">
+      {/* Top Film Status Bar */}
+      <div className="mb-2 flex items-center justify-between px-2 py-1 text-[0.65rem] font-bold tracking-widest text-white/60 uppercase">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse" />
+          <span className="font-mono text-white/90">REC 00:24:18:02</span>
+        </div>
+        <span className="font-mono text-white/50">{'4K DCI // 24.00 FPS'}</span>
+      </div>
+
+      <div className="relative h-[36rem] overflow-hidden rounded-lg sm:h-[46rem] lg:h-[58rem]">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className={`absolute inset-0 grid gap-2 ${
+            className={`absolute inset-0 grid gap-2.5 ${
               visibleImages.length === 1
                 ? 'grid-rows-1'
                 : visibleImages.length === 2
@@ -60,13 +69,24 @@ export function AboutGallery({
           >
             {visibleImages.map((image, index) => (
               <div
-                className="relative min-h-0 overflow-hidden bg-surface"
+                className="cinematic-image-wrapper group relative min-h-0 bg-surface shadow-inner"
                 key={`${relationID(image)}-${index}`}
               >
+                {/* Viewfinder corner crop marks */}
+                <span className="cinematic-corner-mark top-2 left-2 border-t-2 border-l-2 border-white/60" />
+                <span className="cinematic-corner-mark top-2 right-2 border-t-2 border-r-2 border-white/60" />
+                <span className="cinematic-corner-mark bottom-2 left-2 border-b-2 border-l-2 border-white/60" />
+                <span className="cinematic-corner-mark bottom-2 right-2 border-b-2 border-r-2 border-white/60" />
+
+                {/* Scene badge overlay on hover */}
+                <div className="absolute top-3 right-3 z-10 rounded bg-black/60 px-2 py-0.5 font-mono text-[0.625rem] font-bold text-white/80 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100">
+                  {`SCENE 0${index + 1} // TAKE ${groupIndex + 1}`}
+                </div>
+
                 <PayloadImage
                   fill
-                  className="object-cover transition-transform duration-700 hover:scale-[1.025]"
-                  fallbackClassName="h-full w-full"
+                  className="object-cover transition-all duration-700 group-hover:scale-[1.035] group-hover:brightness-105"
+                  fallbackClassName="h-full w-full bg-surface"
                   media={image}
                   preferredSize={visibleImages.length === 1 ? 'large' : 'medium'}
                   sizes="(max-width: 1024px) 100vw, 40vw"
@@ -78,19 +98,26 @@ export function AboutGallery({
       </div>
 
       {groupCount > 1 ? (
-        <div className="mt-5 flex justify-center gap-2">
-          {Array.from({ length: groupCount }, (_, index) => (
-            <button
-              aria-label={`Gallery ${index + 1}`}
-              aria-pressed={groupIndex === index}
-              className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                groupIndex === index ? 'bg-brand' : 'bg-white/30'
-              }`}
-              key={index}
-              onClick={() => setGroupIndex(index)}
-              type="button"
-            />
-          ))}
+        <div className="mt-4 flex items-center justify-between px-2">
+          <span className="text-[0.65rem] font-mono tracking-wider text-white/50 uppercase">
+            FRAME {groupIndex + 1} OF {groupCount}
+          </span>
+          <div className="flex gap-2">
+            {Array.from({ length: groupCount }, (_, index) => (
+              <button
+                aria-label={`Gallery frame ${index + 1}`}
+                aria-pressed={groupIndex === index}
+                className={`h-2 rounded-full transition-all ${
+                  groupIndex === index
+                    ? 'w-6 bg-brand shadow-[0_0_8px_rgba(255,92,0,0.6)]'
+                    : 'w-2 bg-white/25 hover:bg-white/50'
+                }`}
+                key={index}
+                onClick={() => setGroupIndex(index)}
+                type="button"
+              />
+            ))}
+          </div>
         </div>
       ) : null}
     </div>

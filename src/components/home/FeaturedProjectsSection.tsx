@@ -30,7 +30,14 @@ export function FeaturedProjectsSection({
   if (section.sourceMode === 'projectCollection') {
     if (!projects.length) return null
     return (
-      <section className="section-shell bg-surface" id="featured-projects">
+      <section
+        className="section-shell cinematic-bg-studio cinematic-grain relative overflow-hidden border-t border-white/[0.06]"
+        id="featured-projects"
+      >
+        <div
+          aria-hidden="true"
+          className="cinematic-glow-spotlight top-1/4 -right-32 h-[500px] w-[500px] bg-brand/[0.06]"
+        />
         <Container>
           <Reveal>
             <SectionHeading
@@ -56,7 +63,14 @@ export function FeaturedProjectsSection({
   if (!items.length) return null
 
   return (
-    <section className="section-shell bg-surface" id="featured-projects">
+    <section
+      className="section-shell cinematic-bg-studio cinematic-grain relative overflow-hidden border-t border-white/[0.06]"
+      id="featured-projects"
+    >
+      <div
+        aria-hidden="true"
+        className="cinematic-glow-spotlight top-1/4 -right-32 h-[500px] w-[500px] bg-brand/[0.06]"
+      />
       <Container>
         <Reveal>
           <SectionHeading

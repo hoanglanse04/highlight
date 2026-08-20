@@ -1,11 +1,15 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 
 export function CreateUserModal() {
   const [isOpen, setIsOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,10 +20,6 @@ export function CreateUserModal() {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Intercept clicks on the "Tạo mới" button in the collection list header
   useEffect(() => {
@@ -117,8 +117,12 @@ export function CreateUserModal() {
         setRole('editor')
         window.location.reload()
       }, 1000)
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'Có lỗi kết nối xảy ra khi tạo tài khoản.')
+    } catch (err: unknown) {
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : 'Có lỗi kết nối xảy ra khi tạo tài khoản.',
+      )
     } finally {
       setLoading(false)
     }

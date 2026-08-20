@@ -55,9 +55,15 @@ export function HeroSection({ homepage, labels, locale }: HeroSectionProps) {
 
       <Container className="relative z-10">
         <Reveal className="max-w-[78rem]">
-          {hero.eyebrow ? (
-            <p className="section-eyebrow">{hero.eyebrow}</p>
-          ) : null}
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            {hero.eyebrow ? (
+              <p className="section-eyebrow mb-0">{hero.eyebrow}</p>
+            ) : null}
+            <span className="cinematic-film-badge">
+              <span className="cinematic-film-badge-dot" />
+              <span>OFFICIAL SHOWREEL</span>
+            </span>
+          </div>
           <h1 className="max-w-[21ch] font-heading text-[clamp(2rem,3.6vw,4rem)] leading-[1.12] font-bold tracking-[-0.025em] text-balance uppercase">
             {hero.title}
           </h1>

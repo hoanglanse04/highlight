@@ -21,23 +21,43 @@ export function OrganizationJsonLd({
     .filter((url): url is string => Boolean(url))
   const address = settings.contact?.address?.trim()
 
+  const siteURL = getSiteURL()?.toString()
+
   const data = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: settings.brand.siteName,
-    ...(settings.brand.legalName
-      ? { legalName: settings.brand.legalName }
-      : {}),
-    ...(getSiteURL() ? { url: getSiteURL()?.toString() } : {}),
-    ...(absoluteMediaURL(settings.brand.logoMark, 'medium')
-      ? { logo: absoluteMediaURL(settings.brand.logoMark, 'medium') }
-      : {}),
-    ...(settings.contact?.email ? { email: settings.contact.email } : {}),
-    ...(settings.contact?.phone ? { telephone: settings.contact.phone } : {}),
-    ...(address
-      ? { address: { '@type': 'PostalAddress', streetAddress: address } }
-      : {}),
-    ...(socialLinks.length ? { sameAs: socialLinks } : {}),
+    '@graph': [
+      {
+        '@type': 'Organization',
+        ...(siteURL ? { '@id': `${siteURL}#organization` } : {}),
+        name: settings.brand.siteName,
+        ...(settings.brand.legalName
+          ? { legalName: settings.brand.legalName }
+          : {}),
+        ...(siteURL ? { url: siteURL } : {}),
+        ...(absoluteMediaURL(settings.brand.logoMark, 'medium')
+          ? { logo: absoluteMediaURL(settings.brand.logoMark, 'medium') }
+          : {}),
+        ...(settings.contact?.email ? { email: settings.contact.email } : {}),
+        ...(settings.contact?.phone ? { telephone: settings.contact.phone } : {}),
+        ...(address
+          ? { address: { '@type': 'PostalAddress', streetAddress: address } }
+          : {}),
+        ...(socialLinks.length ? { sameAs: socialLinks } : {}),
+      },
+      ...(siteURL
+        ? [
+            {
+              '@type': 'WebSite',
+              '@id': `${siteURL}#website`,
+              name: settings.brand.siteName,
+              url: siteURL,
+              publisher: {
+                '@id': `${siteURL}#organization`,
+              },
+            },
+          ]
+        : []),
+    ],
   }
 
   return (

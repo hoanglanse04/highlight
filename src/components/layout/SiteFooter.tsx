@@ -109,13 +109,24 @@ export function SiteFooter({
   const address = footer?.contact?.address ?? settings?.contact?.address
   const displayPhone = footer?.contact?.phone ?? settings?.contact?.phone
 
+  const mapQuery = address ? encodeURIComponent(address) : ''
+  const customMapEmbed = (footer?.contact as Record<string, unknown> | undefined)?.mapEmbedUrl as string | undefined
+  const mapSrc =
+    customMapEmbed ||
+    (mapQuery
+      ? `https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`
+      : null)
+  const mapDirectionsUrl = mapQuery
+    ? `https://www.google.com/maps/search/?api=1&query=${mapQuery}`
+    : '#'
+
   return (
     <>
       <FloatingContactDock locale={locale} settings={settings} />
 
       <footer className="sf-root" role="contentinfo">
 
-        {/* ── Top grid: brand + nav columns ── */}
+        {/* ── Top grid: brand + nav columns + live location map ── */}
         <div className="sf-top">
           <Container className="sf-top-inner">
 
@@ -152,6 +163,40 @@ export function SiteFooter({
                 </ul>
               </nav>
             ))}
+
+            {/* Live Location Map */}
+            {mapSrc ? (
+              <div className="sf-map-wrapper">
+                <div className="sf-map-header">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-brand animate-pulse shadow-[0_0_8px_rgba(255,92,0,0.8)]" />
+                    <span className="sf-nav-heading mb-0">
+                      {locale === 'vi' ? 'Bản đồ vị trí' : 'Location Map'}
+                    </span>
+                  </div>
+                  <a
+                    className="text-[0.6875rem] font-semibold text-brand transition-colors hover:text-brand-hover hover:underline"
+                    href={mapDirectionsUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {locale === 'vi' ? 'Mở Google Maps ↗' : 'Open in Maps ↗'}
+                  </a>
+                </div>
+
+                <div className="sf-map-card">
+                  <iframe
+                    allowFullScreen
+                    aria-label={`Bản đồ vị trí ${address}`}
+                    className="sf-map-iframe"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={mapSrc}
+                    title="Bản đồ vị trí Highlight Media"
+                  />
+                </div>
+              </div>
+            ) : null}
 
           </Container>
         </div>

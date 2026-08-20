@@ -1513,6 +1513,10 @@ export interface Footer {
     email?: string | null;
     phone?: string | null;
     address?: string | null;
+    /**
+     * Nếu để trống, hệ thống sẽ tự động hiển thị Google Maps theo trường Địa chỉ ở trên.
+     */
+    mapEmbedUrl?: string | null;
   };
   legal?: {
     copyright?: string | null;
@@ -1897,6 +1901,7 @@ export interface FooterSelect<T extends boolean = true> {
         email?: T;
         phone?: T;
         address?: T;
+        mapEmbedUrl?: T;
       };
   legal?:
     | T

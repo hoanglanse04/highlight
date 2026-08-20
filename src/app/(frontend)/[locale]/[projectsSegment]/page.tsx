@@ -27,7 +27,10 @@ import {
 } from '@/lib/projects/queryParams'
 import { getProjectsPath, isProjectsSegment } from '@/lib/projects/routes'
 import { buildProjectsMetadata } from '@/lib/projects/seo'
-import { buildProjectsJsonLd } from '@/lib/projects/structuredData'
+import {
+  buildProjectsBreadcrumbsJsonLd,
+  buildProjectsJsonLd,
+} from '@/lib/projects/structuredData'
 import {
   getFooter,
   getHeader,
@@ -212,6 +215,14 @@ export default async function ProjectsListingPage({
           locale,
           projects: projects.docs,
           title: heading,
+        })}
+      />
+      <ProjectJsonLd
+        data={buildProjectsBreadcrumbsJsonLd({
+          categoryTitle: category?.title,
+          homeTitle: homeT('home'),
+          locale,
+          projectsTitle: t('title'),
         })}
       />
       <section className="border-b border-border bg-surface pt-16 pb-14 sm:pt-20 sm:pb-20">

@@ -27,7 +27,10 @@ export function ProjectCategoriesSection({
   if (section.sourceMode === 'categoryCollection') {
     if (!categories.length) return null
     return (
-      <section className="section-shell" id="categories">
+      <section
+        className="section-shell cinematic-bg-dark cinematic-grain relative overflow-hidden border-t border-white/[0.06]"
+        id="categories"
+      >
         <Container>
           <Reveal>
             <SectionHeading
@@ -82,7 +85,10 @@ export function ProjectCategoriesSection({
   if (!items.length) return null
 
   return (
-    <section className="section-shell" id="categories">
+    <section
+      className="section-shell cinematic-bg-dark cinematic-grain relative overflow-hidden border-t border-white/[0.06]"
+      id="categories"
+    >
       <Container>
         <Reveal>
           <SectionHeading

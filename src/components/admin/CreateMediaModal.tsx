@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 
 interface FileItem {
@@ -13,7 +13,11 @@ interface FileItem {
 
 export function CreateMediaModal() {
   const [isOpen, setIsOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
   const [fileList, setFileList] = useState<FileItem[]>([])
   const [internalTitle, setInternalTitle] = useState('')
   const [alt, setAlt] = useState('')
@@ -26,10 +30,6 @@ export function CreateMediaModal() {
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Clean up object URLs on unmount or file list change
   useEffect(() => {
@@ -215,8 +215,10 @@ export function CreateMediaModal() {
         setUsageNotes('')
         window.location.reload()
       }, 1000)
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'Có lỗi kết nối khi tải ảnh lên.')
+    } catch (err: unknown) {
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Có lỗi kết nối khi tải ảnh lên.',
+      )
     } finally {
       setLoading(false)
     }
@@ -392,6 +394,7 @@ export function CreateMediaModal() {
                       <div className="highlight-media-multi-grid">
                         {fileList.map((item) => (
                           <div className="highlight-media-thumb-item" key={item.id}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               alt={item.name}
                               className="highlight-media-thumb-item__img"

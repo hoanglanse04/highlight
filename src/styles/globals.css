@@ -123,24 +123,553 @@ a {
   inset: 0;
   content: '';
   pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitchTiles'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.72'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 0);
+  background-size: 20px 20px;
+  transform: translateZ(0);
+  contain: strict;
+}
+
+.cinematic-bg-studio {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 20%, rgba(255, 92, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 85% 80%, rgba(30, 45, 65, 0.2) 0%, transparent 65%),
+    radial-gradient(circle at 50% 50%, #131513 0%, #090a09 100%);
+  contain: layout paint;
+}
+
+.cinematic-bg-dark {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 92, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(255, 120, 40, 0.04) 0%, transparent 45%),
+    linear-gradient(180deg, #101210 0%, #080908 50%, #0d0f0d 100%);
+  contain: layout paint;
+}
+
+.cinematic-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.cinematic-glow-spotlight {
+  position: absolute;
+  pointer-events: none;
+  filter: blur(70px);
+  border-radius: 9999px;
+  z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
+  contain: layout paint;
+}
+
+.cinematic-film-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-space-grotesk), monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.cinematic-film-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.cinematic-quote-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid rgb(var(--brand));
+  border-radius: 0 10px 10px 0;
+  padding: 1.25rem 1.6rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+.cinematic-quote-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 92, 0, 0.7), transparent 70%);
+}
+
+.cinematic-gallery-container {
+  position: relative;
+  border-radius: 14px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 30px 60px -12px rgba(0, 0, 0, 0.9),
+    0 0 40px -10px rgba(255, 92, 0, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.cinematic-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cinematic-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
+  transition: opacity 0.3s ease;
+}
+
+.cinematic-corner-mark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .cinematic-media-overlay {
   background:
-    linear-gradient(
-      90deg,
+    linear-gradient(90deg,
       rgb(5 6 5 / 0.8) 0%,
       rgb(5 6 5 / 0.18) 55%,
-      rgb(5 6 5 / 0.32) 100%
-    ),
-    linear-gradient(
-      180deg,
+      rgb(5 6 5 / 0.32) 100%),
+    linear-gradient(180deg,
       rgb(5 6 5 / 0.12) 0%,
       rgb(5 6 5 / 0.18) 58%,
-      rgb(5 6 5 / 0.9) 100%
-    );
+      rgb(5 6 5 / 0.9) 100%);
+}
+
+/* ─── Header Silk Ribbon ───────────────────────────────────────── */
+
+.header-silk-glow {
+  position: absolute;
+  top: -40%;
+  left: 15%;
+  width: 70%;
+  height: 180%;
+  background: radial-gradient(ellipse 50% 60% at 50% 50%, rgba(255, 92, 0, 0.14) 0%, rgba(255, 140, 50, 0.06) 50%, transparent 80%);
+  filter: blur(25px);
+  pointer-events: none;
+  animation: silkGlowPulse 8s ease-in-out infinite alternate;
+}
+
+.header-silk-wrap {
+  position: absolute;
+  inset: -5% -10%;
+  width: 120%;
+  height: 110%;
+  pointer-events: none;
+  animation: silkHorizontalDrift 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.header-silk-wave {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.95;
+  transform: translateZ(0);
+}
+
+.silk-layer-primary {
+  transform-origin: 50% 50%;
+  animation: silkWave1 11s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.silk-layer-secondary {
+  transform-origin: 50% 50%;
+  animation: silkWave2 15s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.silk-layer-line {
+  transform-origin: 50% 50%;
+  animation: silkWaveLine 9s ease-in-out infinite alternate;
+  will-change: transform, filter;
+}
+
+.header-silk-bottom-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 92, 0, 0.15) 15%,
+      rgba(255, 140, 50, 0.7) 45%,
+      rgba(255, 190, 100, 0.9) 60%,
+      rgba(255, 92, 0, 0.3) 85%,
+      transparent 100%);
+  background-size: 200% 100%;
+  box-shadow: 0 0 12px 1.5px rgba(255, 92, 0, 0.3);
+  pointer-events: none;
+  animation: silkBeamSweep 10s ease-in-out infinite alternate;
+}
+
+@keyframes silkHorizontalDrift {
+  0% {
+    transform: translateX(-3%) scaleY(0.96);
+  }
+
+  50% {
+    transform: translateX(1%) scaleY(1.04);
+  }
+
+  100% {
+    transform: translateX(3%) scaleY(0.98);
+  }
+}
+
+@keyframes silkWave1 {
+  0% {
+    transform: translateY(-5px) scaleY(0.92) skewX(-1.5deg);
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: translateY(4px) scaleY(1.08) skewX(1.2deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-2px) scaleY(0.95) skewX(-0.8deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes silkWave2 {
+  0% {
+    transform: translateY(6px) scaleY(1.08) skewX(2deg);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: translateY(-5px) scaleY(0.9) skewX(-1.8deg);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: translateY(3px) scaleY(1.03) skewX(1deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes silkWaveLine {
+  0% {
+    transform: translateY(-4px) scaleY(0.93);
+    filter: drop-shadow(0 0 4px rgba(255, 92, 0, 0.4));
+  }
+
+  50% {
+    transform: translateY(5px) scaleY(1.07);
+    filter: drop-shadow(0 0 12px rgba(255, 150, 60, 0.8));
+  }
+
+  100% {
+    transform: translateY(-2px) scaleY(0.97);
+    filter: drop-shadow(0 0 6px rgba(255, 92, 0, 0.5));
+  }
+}
+
+@keyframes silkBeamSweep {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.75;
+  }
+
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.8;
+  }
+}
+
+@keyframes silkGlowPulse {
+  0% {
+    opacity: 0.7;
+    transform: scaleX(0.9) translateX(-5%);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1.05) translateX(3%);
+  }
+
+  100% {
+    opacity: 0.75;
+    transform: scaleX(0.95) translateX(-2%);
+  }
+}
+
+/* ─── Cinema Camera & Projector Stage ────────────────────────── */
+
+.cinematic-camera-stage {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(20, 22, 20, 0.95) 50%, rgba(10, 11, 10, 1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.9),
+    0 0 40px -10px rgba(255, 92, 0, 0.12);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+
+.cinematic-camera-stage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 92, 0, 0.6), transparent);
+}
+
+.camera-gimbal-float {
+  animation: cameraGimbalMotion 8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes cameraGimbalMotion {
+  0% {
+    transform: translateY(-4px) rotate(0.4deg) scale(1.01);
+  }
+
+  50% {
+    transform: translateY(5px) rotate(-0.3deg) scale(1.03);
+  }
+
+  100% {
+    transform: translateY(-2px) rotate(0.2deg) scale(1.015);
+  }
+}
+
+.projector-beam-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 40% at 85% 38%, rgba(255, 150, 40, 0.32) 0%, rgba(255, 92, 0, 0.12) 35%, transparent 70%),
+    linear-gradient(95deg, transparent 40%, rgba(255, 170, 60, 0.15) 75%, rgba(255, 200, 100, 0.25) 100%);
+  pointer-events: none;
+  animation: projectorBeamFlicker 3.5s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+@keyframes projectorBeamFlicker {
+  0% {
+    opacity: 0.8;
+    transform: scaleY(0.96) scaleX(0.98);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scaleY(1.04) scaleX(1.02);
+  }
+
+  75% {
+    opacity: 0.85;
+    transform: scaleY(0.98) scaleX(1.01);
+  }
+
+  100% {
+    opacity: 0.95;
+    transform: scaleY(1.02) scaleX(0.99);
+  }
+}
+
+.tally-rec-pulse {
+  animation: tallyPulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes tallyPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 12px 2px #ef4444;
+  }
+
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px 0px #ef4444;
+  }
+}
+
+.vu-bar {
+  display: inline-block;
+  width: 3px;
+  border-radius: 1px;
+  background: linear-gradient(to top, #22c55e 0%, #eab308 70%, #ef4444 100%);
+  animation: vuJump 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes vuJump {
+  0% {
+    height: 4px;
+  }
+
+  50% {
+    height: 14px;
+  }
+
+  100% {
+    height: 8px;
+  }
+}
+
+.cinema-screen-card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.95),
+    0 0 50px -10px rgba(255, 92, 0, 0.14);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+
+.cinema-screen-glow {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 35%;
+  height: 120%;
+  background: radial-gradient(ellipse at 0% 50%, rgba(255, 140, 50, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 2;
+  filter: blur(20px);
+  animation: projectorBeamFlicker 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes slideProgressFill {
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+/* ─── Cinematic CTA Section ───────────────────────────────────── */
+
+.cinematic-cta-card {
+  position: relative;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(20, 22, 20, 0.8) 50%, rgba(10, 11, 10, 0.95) 100%);
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.95),
+    0 0 50px -10px rgba(255, 92, 0, 0.12);
+  overflow: hidden;
+}
+
+.cinematic-cta-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 92, 0, 0.8), rgba(255, 180, 80, 1), rgba(255, 92, 0, 0.8), transparent);
+}
+
+.cinematic-cta-spotlight {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 650px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(255, 92, 0, 0.18) 0%, rgba(255, 140, 50, 0.06) 45%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.cinematic-headline-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 250px;
+  background: radial-gradient(ellipse at center, rgba(255, 92, 0, 0.14) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(35px);
+  z-index: 0;
+}
+
+.button-magnetic-glow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1.125rem 2.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ff7a1a 0%, #ff5c00 50%, #e04a00 100%);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  box-shadow:
+    0 10px 30px -5px rgba(255, 92, 0, 0.5),
+    0 0 20px 0px rgba(255, 92, 0, 0.3);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+}
+
+.button-magnetic-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.75s ease;
+}
+
+.button-magnetic-glow:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow:
+    0 15px 40px -5px rgba(255, 92, 0, 0.7),
+    0 0 35px 2px rgba(255, 140, 50, 0.5);
+}
+
+.button-magnetic-glow:hover::after {
+  left: 140%;
 }
 
 .section-light {
@@ -441,11 +970,11 @@ a {
   line-height: 1.85;
 }
 
-.project-rich-text > :first-child {
+.project-rich-text> :first-child {
   margin-top: 0;
 }
 
-.project-rich-text > :last-child {
+.project-rich-text> :last-child {
   margin-bottom: 0;
 }
 
@@ -507,6 +1036,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -524,7 +1054,7 @@ a {
   background: rgb(var(--background));
 }
 
-/* Top section — brand + nav grid */
+/* Top section — brand + nav grid + map */
 .sf-top {
   padding-block: clamp(2.5rem, 5vw, 4rem);
 }
@@ -532,10 +1062,10 @@ a {
 .sf-top-inner {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem 3rem;
+  gap: 2.5rem 2.5rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   .sf-top-inner {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -543,8 +1073,58 @@ a {
 
 @media (min-width: 1024px) {
   .sf-top-inner {
-    grid-template-columns: 1.6fr repeat(3, 1fr);
+    grid-template-columns: 1.2fr 0.9fr 1.6fr;
+    align-items: start;
   }
+}
+
+.sf-map-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .sf-map-wrapper {
+    grid-column: span 2;
+  }
+}
+
+.sf-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sf-map-card {
+  position: relative;
+  width: 100%;
+  height: 12.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(var(--border) / 0.8);
+  overflow: hidden;
+  background: rgb(var(--surface));
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(255, 92, 0, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sf-map-card:hover {
+  border-color: rgb(var(--brand) / 0.6);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.9), 0 0 25px -5px rgba(255, 92, 0, 0.2);
+}
+
+.sf-map-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: contrast(102%) brightness(92%) invert(90%) hue-rotate(180deg);
+  transition: filter 0.3s ease;
+}
+
+.sf-map-card:hover .sf-map-iframe {
+  filter: contrast(100%) brightness(100%);
 }
 
 /* Brand column */
@@ -715,5 +1295,3 @@ a {
 .sf-copy-year {
   opacity: 0.6;
 }
-
-

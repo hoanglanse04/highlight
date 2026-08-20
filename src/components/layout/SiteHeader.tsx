@@ -21,6 +21,89 @@ type SiteHeaderProps = {
   switchLanguageLabel: string
 }
 
+function HeaderSilkRibbon() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {/* Ambient soft glow aura */}
+      <div className="header-silk-glow" />
+
+      {/* Elegant organic moving silk wave SVG */}
+      <div className="header-silk-wrap">
+        <svg
+          className="header-silk-wave"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 92"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="silkGradPrimary" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stopColor="#ff5c00" stopOpacity="0" />
+              <stop offset="20%" stopColor="#ff5c00" stopOpacity="0.08" />
+              <stop offset="48%" stopColor="#ff8533" stopOpacity="0.18" />
+              <stop offset="72%" stopColor="#ffaa55" stopOpacity="0.12" />
+              <stop offset="90%" stopColor="#ff5c00" stopOpacity="0.04" />
+              <stop offset="100%" stopColor="#ff5c00" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="silkGradSecondary" x1="0%" x2="100%" y1="100%" y2="0%">
+              <stop offset="0%" stopColor="#ff5c00" stopOpacity="0" />
+              <stop offset="30%" stopColor="#ff701a" stopOpacity="0.06" />
+              <stop offset="60%" stopColor="#ff9d47" stopOpacity="0.14" />
+              <stop offset="85%" stopColor="#ff5c00" stopOpacity="0.05" />
+              <stop offset="100%" stopColor="#ff5c00" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="silkLineGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stopColor="#ff5c00" stopOpacity="0" />
+              <stop offset="18%" stopColor="#ff5c00" stopOpacity="0.25" />
+              <stop offset="48%" stopColor="#ffaa55" stopOpacity="0.75" />
+              <stop offset="78%" stopColor="#ff701a" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#ff5c00" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          {/* Primary soft silk body layer */}
+          <g className="silk-layer-primary">
+            <path
+              d="M-40,58 C260,18 520,82 860,34 C1160,-2 1360,62 1480,44 L1480,92 L-40,92 Z"
+              fill="url(#silkGradPrimary)"
+            />
+          </g>
+
+          {/* Secondary intertwining ribbon layer */}
+          <g className="silk-layer-secondary">
+            <path
+              d="M-40,28 C280,72 580,12 920,54 C1220,88 1380,24 1480,48 L1480,92 L-40,92 Z"
+              fill="url(#silkGradSecondary)"
+            />
+          </g>
+
+          {/* Fine glowing silk core thread line */}
+          <g className="silk-layer-line">
+            <path
+              d="M-40,50 C260,22 520,76 860,36 C1160,4 1360,58 1480,40"
+              fill="none"
+              stroke="url(#silkLineGrad)"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M-40,50 C260,22 520,76 860,36 C1160,4 1360,58 1480,40"
+              fill="none"
+              opacity="0.45"
+              stroke="url(#silkLineGrad)"
+              strokeWidth="4"
+            />
+          </g>
+        </svg>
+      </div>
+
+      {/* Bottom glowing beam line */}
+      <div className="header-silk-bottom-line" />
+    </div>
+  )
+}
+
 export function SiteHeader({
   closeMenuLabel,
   header,
@@ -65,9 +148,10 @@ export function SiteHeader({
 
   return (
     <header
-      className={`${sticky ? 'sticky' : 'relative'} inset-x-0 top-0 z-50 w-full border-b border-white/10 bg-background/95 backdrop-blur-xl`}
+      className={`${sticky ? 'sticky' : 'relative'} inset-x-0 top-0 z-50 w-full overflow-hidden border-b border-white/10 bg-background/90 backdrop-blur-2xl`}
     >
-      <div className="mx-auto flex h-[78px] w-full max-w-[92.5rem] items-center justify-between gap-5 px-5 md:h-[92px] md:px-10 xl:px-14">
+      <HeaderSilkRibbon />
+      <div className="relative z-10 mx-auto flex h-[78px] w-full max-w-[92.5rem] items-center justify-between gap-5 px-5 md:h-[92px] md:px-10 xl:px-14">
         <SmartLink
           aria-label={siteName}
           className="relative z-10 flex min-w-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
